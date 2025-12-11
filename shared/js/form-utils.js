@@ -74,7 +74,7 @@ class FormUtils {
            
             setTimeout(() => {
                
-                if (email === 'admin' && password === '1234') {
+                if (email === 'admin@demo.com' && password === 'gomezsanchez123') {
                     reject(new Error('Invalid email or password'));
                 } else {
                     resolve({ success: true, user: { email } });
