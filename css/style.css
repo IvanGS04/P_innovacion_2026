@@ -123,7 +123,7 @@ body {
         0 0 0 1px rgba(255, 255, 255, 0.2);
 }
 
-/* Card Decoration */
+
 .card-decoration {
     position: absolute;
     top: 0;
@@ -233,7 +233,7 @@ body {
     font-style: italic;
 }
 
-/* Form Group & Input Styles */
+
 .form-group {
     margin-bottom: 28px;
     position: relative;
@@ -312,7 +312,7 @@ body {
     border-radius: 4px;
 }
 
-/* Input Waves */
+
 .input-waves {
     position: absolute;
     bottom: 0;
@@ -346,7 +346,7 @@ body {
     100% { transform: translateX(100%); }
 }
 
-/* Password Toggle */
+
 .password-wrapper input {
     padding-right: 60px;
 }
@@ -391,7 +391,7 @@ body {
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23718096' stroke-width='1.5'%3e%3cpath stroke-linecap='round' stroke-linejoin='round' d='M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 11-4.243-4.243m4.242 4.242L9.88 9.88'/%3e%3c/svg%3e");
 }
 
-/* Form Options */
+
 .form-options {
     display: flex;
     justify-content: space-between;
@@ -509,7 +509,7 @@ body {
     transform: translateY(-1px);
 }
 
-/* Creative Login Button */
+
 .login-btn {
     width: 100%;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -560,7 +560,7 @@ body {
     transition: opacity 0.3s ease;
 }
 
-/* Creative Loading */
+
 .btn-loader {
     position: absolute;
     top: 50%;
@@ -598,7 +598,7 @@ body {
     opacity: 1;
 }
 
-/* Creative Divider */
+
 .divider {
     display: flex;
     align-items: center;
@@ -638,7 +638,7 @@ body {
     white-space: nowrap;
 }
 
-/* Creative Social */
+
 .creative-social {
     display: flex;
     gap: 16px;
@@ -700,7 +700,7 @@ body {
 .dribbble-btn { color: #ea4c89; }
 .dribbble-icon { background: linear-gradient(135deg, #ea4c89, #f73859); }
 
-/* Signup Link */
+
 .signup-link {
     text-align: center;
 }
@@ -736,7 +736,7 @@ body {
     text-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
 }
 
-/* Error States */
+
 .error-message {
     color: #e53e3e;
     font-size: 12px;
@@ -769,7 +769,7 @@ body {
     75% { transform: translateX(5px); }
 }
 
-/* Creative Success Message */
+
 .success-message {
     display: none;
     text-align: center;
@@ -842,7 +842,7 @@ body {
     font-style: italic;
 }
 
-/* Mobile Responsive */
+
 @media (max-width: 480px) {
     body {
         padding: 16px;
