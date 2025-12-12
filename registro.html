@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema CECYTEA </title>
+    <title>Sistema de registro CECYTEA </title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
@@ -32,7 +32,7 @@
                 <h2>Registro del Sistema CECYTEA San Jose de Gracia</h2>
             </div>
             
-            <form class="login-form" id="loginForm" novalidate>
+            <form class="login-form" id="registerForm" novalidate>
                 <div class="form-group">
                     <div class="input-wrapper">
                         <div class="input-decoration"></div>
@@ -44,6 +44,7 @@
                             <div class="wave wave-3"></div>
                         </div>
                     </div>
+                    <span class="error-message" id="nameError"></span>
                 </div>
                 <div class="form-group">
                     <div class="input-wrapper">
@@ -56,6 +57,7 @@
                             <div class="wave wave-3"></div>
                         </div>
                     </div>
+                    <span class="error-message" id="ApellidoPError"></span>
                 </div>
                 <div class="form-group">
                     <div class="input-wrapper">
@@ -69,6 +71,7 @@
                                 <div class="wave wave-3"></div>
                             </div>
                         </div>
+                        <span class="error-message" id="ApellidoMError"></span>
                     </div>  
                     
                 </div>
@@ -142,7 +145,8 @@
         </div>
     </div>
     
-    <script src="./shared/js/form-utils.js"></script>
-    <script src="/js/script.js"></script>
+  <script src="./shared/js/form-utils.js"></script>
+<script src="/js/registro.js"></script>
+    
 </body>
 </html>

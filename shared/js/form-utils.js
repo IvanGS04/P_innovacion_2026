@@ -1,14 +1,21 @@
 class FormUtils {
-    static validateEmail(value) {
-        if (!value) {
-            return { isValid: false, message: 'Correo es requerido' };
-        }
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(value)) {
-            return { isValid: false, message: 'Ingresa un correo valido' };
-        }
-        return { isValid: true };
+   static validateInstitutionalEmail(value) {
+    if (!value) {
+      return { isValid: false, message: 'Correo es requerido' };
     }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(value)) {
+      return { isValid: false, message: 'Ingresa un correo válido' };
+    }
+
+    const domainRegex = /^[^\s@]+@cecytea\.edu\.mx$/i;
+    if (!domainRegex.test(value.trim())) {
+      return { isValid: false, message: 'Solo se permite correo institucional @cecytea.edu.mx' };
+    }
+
+    return { isValid: true };
+  }
     
     static validatePassword(value) {
         if (!value) {
