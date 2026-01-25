@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Planeador - Dashboard</title>
+  <link rel="stylesheet" href="./css/styles.css">
+</head>
+<body>
+  <div class="container">
+    <div class="topbar">
+      <div class="brand">
+        <div class="badge">P</div>
+        <div>
+          <h1>Planeador CECYTEA</h1>
+          <p> Parcial / Semana</p>
+        </div>
+      </div>
+
+      <div class="actions">
+        <a class="btn primary" href="./editor.html">+ Nueva planeación</a>
+        <button class="btn" id="btnExport">Exportar JSON</button>
+        <label class="btn" style="cursor:pointer">
+          Importar JSON
+          <input id="fileImport" type="file" accept="application/json" style="display:none">
+        </label>
+       
+        <a class="btn" href="./dashboard.html" title="Solo recarga en este prototipo">Recargar</a>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h2>Planeaciones</h2>
+        <p class="hint">Filtra y administra. Abre una para ver/editar/imprimir.</p>
+
+        <div class="row">
+          <div class="field">
+            <label>Buscar (materia, grupo, docente, periodo)</label>
+            <input id="q" placeholder="Ej: Programación 5A" />
+          </div>
+          <div class="field">
+            <label>Tipo</label>
+            <select id="type">
+              <option value="all">Todas</option>
+              <option value="parcial">Parcial</option>
+              <option value="semana">Semana</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Orden</label>
+            <select id="order">
+              <option value="new">Más recientes</option>
+              <option value="old">Más antiguas</option>
+              <option value="az">A → Z (materia)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="pills">
+          <div class="pill"><span>Total</span><b id="countTotal">0</b></div>
+          <div class="pill"><span>Parcial</span><b id="countParcial">0</b></div>
+          <div class="pill"><span>Semana</span><b id="countSemana">0</b></div>
+        </div>
+
+        <div class="list" id="list"></div>
+        <div id="empty" class="notice" style="display:none; margin-top:12px">
+          No hay planeaciones todavía. Crea una con “Nueva planeación”.
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Plantillas rápidas</h2>
+        <p class="hint">Crea una planeación con estructura prellenada.</p>
+
+        <div class="list">
+          <div class="item">
+            <p class="itemTitle">Planeación Semanal (básica)</p>
+            <p class="itemMeta">Inicio–Desarrollo–Cierre • Evaluación y recursos</p>
+            <button class="btn ok mini" data-template="semana">Usar plantilla</button>
+          </div>
+          <div class="item">
+            <p class="itemTitle">Planeación de Parcial (básica)</p>
+            <p class="itemMeta">Propósito • Aprendizajes • Secuencia • Evidencias</p>
+            <button class="btn ok mini" data-template="parcial">Usar plantilla</button>
+          </div>
+          <div class="item">
+            <p class="itemTitle">Consejo</p>
+            <p class="itemMeta">Después, podemos agregar: rúbricas, lista de cotejo, exportar a PDF real, y cuentas por docente.</p>
+          </div>
+        </div>
+
+        <hr class="sep">
+        <div class="notice">
+          Tip: para imprimir bonito, abre una planeación y presiona <b>Imprimir / PDF</b>.
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <script src="./js/utils.js"></script>
+  <script src="./js/storage.js"></script>
+  <script src="./js/app-dashboard.js"></script>
+<script src="
+https://cdn.jsdelivr.net/npm/sweetalert2@11.26.17/dist/sweetalert2.all.min.js
+"></script>
+<link href="
+https://cdn.jsdelivr.net/npm/sweetalert2@11.26.17/dist/sweetalert2.min.css
+" rel="stylesheet">
+
+</body>
+</html>

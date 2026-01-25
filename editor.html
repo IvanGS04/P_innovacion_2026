@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Planeador - Editor</title>
+  <link rel="stylesheet" href="./css/styles.css">
+</head>
+<body>
+  <div class="container">
+    <div class="topbar noPrint">
+      <div class="brand">
+        <div class="badge">E</div>
+        <div>
+          <h1>Editor de planeación</h1>
+          <p id="subtitle">Crea / edita y guarda</p>
+        </div>
+      </div>
+      <div class="actions">
+        <a class="btn" href="./dashboard.html">← Dashboard</a>
+        <a class="btn" id="btnView" href="#">Ver / Imprimir</a>
+        <button class="btn ok" id="btnSave">Guardar</button>
+      </div>
+    </div>
+
+    
+    <div class="card noPrint">
+      <h2>Generar planeación automática</h2>
+      <p class="hint">Generación con Inteligencia Artificial: escribe un tema y una breve descripción. Luego revisa y ajusta antes de guardar.</p>
+
+      <div class="row">
+        <div class="field">
+          <label>Tema / título</label>
+          <input id="aiTitulo" placeholder="Ej: Introducción a JavaScript" />
+        </div>
+        <div class="field">
+          <label>Descripción breve</label>
+          <input id="aiDescripcion" placeholder="Ej: Variables, tipos de datos, ejercicios básicos" />
+        </div>
+      </div>
+
+      <div class="row" style="align-items:flex-end">
+        <div class="field" style="min-width:240px">
+          <label>Estilo</label>
+          <select id="aiEstilo">
+            <option value="practico" selected>Práctico</option>
+            <option value="formal">Formal</option>
+            <option value="dinamico">Dinámico</option>
+          </select>
+        </div>
+        <div class="field" style="min-width:260px">
+          <button class="btn primary" id="btnIA" type="button">✨ Generar con IA</button>
+        </div>
+      </div>
+
+      <div id="aiStatus" class="notice" style="display:none;margin-top:10px"></div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h2>Datos generales</h2>
+        <p class="hint">Define el tipo y los datos básicos.</p>
+
+        <div class="row">
+          <div class="field">
+            <label>Tipo</label>
+            <select id="tipo">
+              <option value="semana">Semana</option>
+              <option value="parcial">Parcial</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Periodo (ej: Semana 2 / Parcial 1)</label>
+            <input id="periodo" placeholder="Ej: Semana 2 (Ene 2026)" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label>Materia</label>
+            <input id="materia" placeholder="Ej: Programación" />
+          </div>
+          <div class="field">
+            <label>Grupo</label>
+            <input id="grupo" placeholder="Ej: 5A" />
+          </div>
+          <div class="field">
+            <label>Docente</label>
+            <input id="docente" placeholder="Tu nombre" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Propósito / Intención didáctica</label>
+          <textarea id="proposito" placeholder="¿Qué se busca lograr?"></textarea>
+        </div>
+
+        <div class="twoCols">
+          <div class="field">
+            <label>Aprendizajes esperados (uno por línea)</label>
+            <textarea id="aprendizajes" placeholder="Aprendizaje 1&#10;Aprendizaje 2"></textarea>
+          </div>
+          <div class="field">
+            <label>Observaciones / Adecuaciones</label>
+            <textarea id="observaciones" placeholder="Notas del docente, adecuaciones, etc."></textarea>
+          </div>
+        </div>
+
+        <hr class="sep">
+
+        <div class="twoCols">
+          <div class="field">
+            <label>Evaluación (uno por línea)</label>
+            <textarea id="evaluacion" placeholder="Lista de cotejo&#10;Rúbrica&#10;Examen"></textarea>
+          </div>
+          <div class="field">
+            <label>Recursos (uno por línea)</label>
+            <textarea id="recursos" placeholder="Proyector&#10;Pizarrón&#10;Computadoras"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="sectionTitle">
+          <h2>Actividades</h2>
+          <span class="muted">Inicio, Desarrollo y Cierre </span>
+        </div>
+
+        <div class="twoCols">
+          <div class="field">
+            <label>Inicio</label>
+            <textarea id="inicio" placeholder="Pase de lista&#10;Pregunta detonadora"></textarea>
+          </div>
+          <div class="field">
+            <label>Desarrollo</label>
+            <textarea id="desarrollo" placeholder="Actividad principal&#10;Trabajo en equipo"></textarea>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Cierre</label>
+          <textarea id="cierre" placeholder="Conclusiones&#10;Ticket de salida"></textarea>
+        </div>
+
+        <hr class="sep">
+
+        <div class="notice">
+          Guardado automático no está activado.
+          Usa <b>Guardar</b> y luego <b>Ver / Imprimir</b>.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="./js/utils.js"></script>
+  <script src="./js/storage.js"></script>
+  <script src="./js/app-editor.js"></script>
+
+<script src="
+https://cdn.jsdelivr.net/npm/sweetalert2@11.26.17/dist/sweetalert2.all.min.js
+"></script>
+<link href="
+https://cdn.jsdelivr.net/npm/sweetalert2@11.26.17/dist/sweetalert2.min.css
+" rel="stylesheet">
+
+
+</body>
+</html>

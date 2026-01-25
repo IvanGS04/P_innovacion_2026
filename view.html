@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Planeador - Vista</title>
+  <link rel="stylesheet" href="./css/styles.css">
+</head>
+<body>
+  <div class="container noPrint">
+    <div class="topbar">
+      <div class="brand">
+        <div class="badge">V</div>
+        <div>
+          <h1>Vista / Imprimir</h1>
+          <p>Documento listo para imprimir o guardar como PDF</p>
+        </div>
+      </div>
+      <div class="actions">
+        <a class="btn" id="btnBack" href="./dashboard.html">← Dashboard</a>
+        <a class="btn primary" id="btnEdit" href="#">Editar</a>
+        <button class="btn ok" id="btnPrint">Imprimir / PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="printWrap" id="doc"></div>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <script src="./js/utils.js"></script>
+  <script src="./js/storage.js"></script>
+  <script src="./js/app-view.js"></script>
+
+
+
+  <script src="
+https://cdn.jsdelivr.net/npm/sweetalert2@11.26.17/dist/sweetalert2.all.min.js
+"></script>
+<link href="
+https://cdn.jsdelivr.net/npm/sweetalert2@11.26.17/dist/sweetalert2.min.css
+" rel="stylesheet">
+
+
+</body>
+</html>
