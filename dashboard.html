@@ -109,5 +109,12 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.26.17/dist/sweetalert2.all.min.js
 https://cdn.jsdelivr.net/npm/sweetalert2@11.26.17/dist/sweetalert2.min.css
 " rel="stylesheet">
 
+
+<script>
+if(localStorage.getItem("loggedIn") !== "true"){
+    alert("Debes iniciar sesión primero");
+    window.location.href = "index.html";
+}
+</script>
 </body>
 </html>
