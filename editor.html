@@ -20,6 +20,9 @@
         <a class="btn" href="./dashboard.html">← Dashboard</a>
         <a class="btn" id="btnView" href="#">Ver / Imprimir</a>
         <button class="btn ok" id="btnSave">Guardar</button>
+         <button class="btn" id="toogletheme">
+    <span id="themeicon">🌙</span>
+  </button>
       </div>
     </div>
 
@@ -152,7 +155,7 @@
       </div>
     </div>
   </div>
-
+ 
   <script src="./js/utils.js"></script>
   <script src="./js/storage.js"></script>
   <script src="./js/app-editor.js"></script>
@@ -164,6 +167,42 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.26.17/dist/sweetalert2.all.min.js
 https://cdn.jsdelivr.net/npm/sweetalert2@11.26.17/dist/sweetalert2.min.css
 " rel="stylesheet">
 
+<script>
+(function () {
+  const btn   = document.getElementById('toogletheme');
+  const icon  = document.getElementById('themeicon');
+  const body  = document.body;
+  const KEY   = 'planeador_theme';
 
+  if(!btn) return;
+
+  const ICONS = { dark: '🌙', light: '☀️' };
+
+  const saved = localStorage.getItem(KEY) || 'dark';
+  applyTheme(saved, false);
+
+  btn.addEventListener('click', () => {
+    const next = body.classList.contains('light') ? 'dark' : 'light';
+    applyTheme(next, true);
+  });
+
+  function applyTheme(theme, animate) {
+    if (animate) {
+      btn.style.transform = 'scale(.85)';
+      setTimeout(()=> btn.style.transform = '', 150);
+    }
+
+    if (theme === 'light') {
+      body.classList.add('light');
+      icon.textContent = ICONS.light;
+    } else {
+      body.classList.remove('light');
+      icon.textContent = ICONS.dark;
+    }
+
+    localStorage.setItem(KEY, theme);
+  }
+})();
+</script>
 </body>
 </html>

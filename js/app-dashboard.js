@@ -202,20 +202,29 @@
     URL.revokeObjectURL(url);
   });
 
-  document.querySelector("#fileImport").addEventListener("change", function (e) {
+  const fileInput = document.querySelector("#fileImport");
+
+if (fileInput) {
+  fileInput.addEventListener("change", function (e) {
     var f = e.target.files[0];
     if (!f) return;
+
     var reader = new FileReader();
     reader.onload = function () {
       var parsed = JSON.parse(reader.result);
       var current = getAll();
       var ids = new Set(current.map(p => p.id));
-      parsed.forEach(p => { if (p.id && !ids.has(p.id)) current.push(p); });
+
+      parsed.forEach(p => {
+        if (p.id && !ids.has(p.id)) current.push(p);
+      });
+
       saveAll(current);
       render();
     };
     reader.readAsText(f);
   });
+}
 
   [elQ, elType, elOrder].forEach(el => el.addEventListener("input", render));
 
