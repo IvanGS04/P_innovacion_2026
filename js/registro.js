@@ -1,26 +1,36 @@
-window.addEventListener('DOMContentLoaded', function(){
+window.addEventListener('DOMContentLoaded', function () {
+
     const usuario = document.getElementById('usuario');
     const password = document.getElementById('password');
     const telefono = document.getElementById('telefono');
     const boton = document.getElementById('boton');
 
-    boton.addEventListener('click', function(){
-        const userData = {
-        usuario: usuario.value.trim(),
-        password: password.value.trim(),
-        telefono: telefono.value.trim()
-        };
+    if (boton) {
+        boton.addEventListener('click', function () {
 
-        if(userData.usuario === '' ||
-            userData.password === '' ||
-            userData.telefono === ''){
-            alert("Rellena todos los campos");
-            return;
-        }
+            const correo = usuario.value.trim();
 
-        localStorage.setItem('user', JSON.stringify(userData));
+         
+            if (correo === '' || password.value.trim() === '' || telefono.value.trim() === '') {
+                alert("Rellena todos los campos");
+                return;
+            }
 
-        alert("Usuario registrado");
-        window.location.href = "index.html";
-    });
+          
+            if (!correo.endsWith('@cecytea.edu.mx')) {
+                alert("Solo se permiten correos con dominio @cecytea.edu.mx");
+                return;
+            }
+
+            const userData = {
+                usuario: correo,
+                password: password.value.trim(),
+                telefono: telefono.value.trim()
+            };
+
+            localStorage.setItem('user', JSON.stringify(userData));
+            alert("Usuario registrado correctamente");
+            window.location.href = "index.html";
+        });
+    }
 });

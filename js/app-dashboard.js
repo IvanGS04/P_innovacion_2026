@@ -132,7 +132,7 @@
     elEmpty.style.display = plans.length === 0 ? "block" : "none";
   }
 
-  // ✅ UN SOLO LISTENER PARA TODOS LOS BOTONES
+  
   elList.addEventListener("click", function (e) {
     const btn = e.target;
 

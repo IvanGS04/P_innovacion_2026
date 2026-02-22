@@ -1,30 +1,38 @@
-window.addEventListener('DOMContentLoaded', function(){
+window.addEventListener('DOMContentLoaded', function () {
 
     const usuario = document.getElementById('usuario');
     const password = document.getElementById('password');
     const btn = document.getElementById('button');
 
-    btn.addEventListener('click', function(){
+    if (btn) {
+        btn.addEventListener('click', function () {
 
-        const userData = localStorage.getItem('user');
+            const correo = usuario.value.trim();
 
-        if(!userData){
-            alert("No hay usuarios registrados");
-            return;
-        }
+       
+            if (!correo.endsWith('@cecytea.edu.mx')) {
+                alert("Solo se permite iniciar sesión con correos @cecytea.edu.mx");
+                return;
+            }
 
-        const user = JSON.parse(userData);
+            const userData = localStorage.getItem('user');
 
-        if(usuario.value.trim() === user.usuario &&
-           password.value.trim() === user.password){
+            if (!userData) {
+                alert("No hay usuarios registrados");
+                return;
+            }
 
-            localStorage.setItem("loggedIn", "true");
-            window.location.href = "dashboard.html";
+            const user = JSON.parse(userData);
 
-        } else {
-            alert("Usuario o contraseña incorrectos");
-        }
+            if (correo === user.usuario &&
+                password.value.trim() === user.password) {
 
-    });
+                localStorage.setItem("loggedIn", "true");
+                window.location.href = "dashboard.html";
 
+            } else {
+                alert("Usuario o contraseña incorrectos");
+            }
+        });
+    }
 });
