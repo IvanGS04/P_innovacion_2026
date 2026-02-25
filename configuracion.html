@@ -12,13 +12,12 @@ body{
     background:#ffffff;
     height:100vh;
     display:flex;
-    justify-content:center;
+    justify-content:flex-end;
     align-items:center;
 }
 
-
 .wrapper{
-    margin-left:70vw;
+    margin-right:20px;
 }
 
 .container{
@@ -27,7 +26,6 @@ body{
     border-radius:20px;
     box-shadow:0 20px 50px rgba(0,0,0,.25);
     overflow:hidden;
-    animation:fade .5s ease;
 }
 
 
@@ -53,14 +51,12 @@ body{
 .name{
     margin-top:10px;
     font-weight:600;
-    color:#1f2328;
 }
 
 .username{
     font-size:14px;
     color:#656d76;
 }
-
 
 .section-title{
     font-size:13px;
@@ -69,14 +65,12 @@ body{
     text-transform:uppercase;
 }
 
-
 .card{
     background:#f8f9fb;
     margin:0 15px 15px;
     border-radius:14px;
     overflow:hidden;
 }
-
 
 .item{
     display:flex;
@@ -94,7 +88,6 @@ body{
 .item:not(:last-child){
     border-bottom:1px solid #eee;
 }
-
 
 .left{
     display:flex;
@@ -114,20 +107,103 @@ body{
     color:#57606a;
 }
 
-
 .arrow{
     color:#999;
 }
 
-.logout{
-    color:#e5533d;
+
+.modal{
+    position:fixed;
+    top:50%;
+    right:-380px;
+    transform:translateY(-50%);
+    width:340px;
+    max-height:90vh;
+    background:white;
+    border-radius:20px;
+    box-shadow:0 20px 50px rgba(0,0,0,.25);
+    transition:.35s ease;
+    z-index:999;
+    overflow:hidden;
 }
 
+.modal.active{
+    right:20px;
+}
 
+.modal-content{
+    overflow-y:auto;
+}
 
-@keyframes fade{
-    from{opacity:0; transform:translateY(15px)}
-    to{opacity:1; transform:translateY(0)}
+.close-x{
+    position:absolute;
+    top:15px;
+    right:18px;
+    font-size:20px;
+    color:#999;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.close-x:hover{
+    color:#000;
+}
+
+/* ALERTA CERRAR SESIÓN */
+.alert-box{
+    padding:25px;
+    text-align:center;
+}
+
+.alert-icon{
+    font-size:40px;
+    color:#e5533d;
+    margin-bottom:15px;
+}
+
+.alert-title{
+    font-weight:600;
+    font-size:18px;
+    margin-bottom:10px;
+}
+
+.alert-text{
+    color:#666;
+    margin-bottom:25px;
+}
+
+.alert-actions{
+    display:flex;
+    gap:10px;
+}
+
+.btn-cancel{
+    flex:1;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    background:#e9ecef;
+    cursor:pointer;
+    font-weight:600;
+}
+
+.btn-confirm{
+    flex:1;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    background:#e5533d;
+    color:white;
+    cursor:pointer;
+    font-weight:600;
+}
+
+.btn-cancel:hover{
+    background:#dee2e6;
+}
+
+.btn-confirm:hover{
+    background:#c43d2c;
 }
 </style>
 </head>
@@ -137,17 +213,15 @@ body{
 <div class="wrapper">
 <div class="container">
 
-
     <div class="header">
         <div class="avatar"><i class="bi bi-person"></i></div>
         <div class="name">Usuario</div>
         <div class="username">@usuario.cecytea.edu.mx</div>
     </div>
 
-
     <div class="section-title">Cuenta</div>
     <div class="card">
-       <div class="item" onclick="window.location.href='cuenta.html'">
+       <div class="item" onclick="abrirModal('cuenta')">
             <div class="left">
                 <div class="icon"><i class="bi bi-person-circle"></i></div>
                 Cuenta
@@ -156,10 +230,9 @@ body{
         </div>
     </div>
 
-
     <div class="section-title">Contenido y Pantalla</div>
     <div class="card">
-        <div class="item" onclick="window.location.href='accesibilidad.html'">
+       <div class="item" onclick="abrirModal('accesibilidad')">
             <div class="left">
                 <div class="icon"><i class="bi bi-universal-access"></i></div>
                 Accesibilidad
@@ -168,10 +241,9 @@ body{
         </div>
     </div>
 
- 
     <div class="section-title">Inicio de sesión</div>
     <div class="card">
-        <div class="item" onclick="window.location.href='cambiarcuenta.html'">
+       <div class="item" onclick="abrirModal('cambiar')">
             <div class="left">
                 <div class="icon"><i class="bi bi-arrow-repeat"></i></div>
                 Cambiar de cuenta
@@ -179,7 +251,7 @@ body{
             <div class="arrow"><i class="bi bi-chevron-right"></i></div>
         </div>
 
-        <div class="item" onclick="window.location.href='cerrarsesion.html'">
+        <div class="item" onclick="abrirModal('cerrar')">
             <div class="left">
                 <div class="icon"><i class="bi bi-box-arrow-right"></i></div>
                 Cerrar sesión
@@ -191,11 +263,165 @@ body{
 </div>
 </div>
 
+<div class="modal" id="modal">
+    <div class="modal-content" id="contenidoModal"></div>
+</div>
+
 <script>
-function accion(opcion){
-    alert("Seleccionaste: " + opcion);
+
+function plantillaPanel(titulo, contenido){
+    return `
+    <div style="position:relative">
+        <div class="close-x" onclick="cerrarModal()">✕</div>
+        <div class="header">
+            <div class="avatar"><i class="bi bi-person"></i></div>
+            <div class="name">${titulo}</div>
+            <div class="username">@usuario.cecytea.edu.mx</div>
+        </div>
+        ${contenido}
+    </div>
+    `;
+}
+
+function abrirModal(tipo){
+    const modal = document.getElementById("modal");
+    const cont  = document.getElementById("contenidoModal");
+    let html = "";
+
+    if(tipo==="cuenta"){
+        html = plantillaPanel("Cuenta",`
+        <div class="section-title">Información de la Cuenta</div>
+        <div class="card">
+            <div class="item">
+                <div class="left">
+                    <div class="icon"><i class="bi bi-envelope"></i></div>
+                    Correo
+                </div>
+                <div class="arrow">usuario@cecytea.edu.mx</div>
+            </div>
+
+            <div class="item">
+                <div class="left">
+                    <div class="icon"><i class="bi bi-telephone"></i></div>
+                    Teléfono
+                </div>
+                <div class="arrow">449-000-0000</div>
+            </div>
+
+            <div class="item">
+                <div class="left">
+                    <div class="icon"><i class="bi bi-lock"></i></div>
+                    Contraseña
+                </div>
+                <div class="arrow">••••••••</div>
+            </div>
+
+        </div>
+        `);
+    }
+
+    if(tipo==="accesibilidad"){
+        html = plantillaPanel("Accesibilidad",`
+        <div class="section-title">Pantalla</div>
+        <div class="card">
+            <div class="item">
+                <div class="left">
+                    <div class="icon"><i class="bi bi-moon"></i></div>
+                    Modo oscuro
+                </div>
+                <div class="arrow">Desactivado</div>
+            </div>
+
+            <div class="item">
+                <div class="left">
+                    <div class="icon"><i class="bi bi-fonts"></i></div>
+                    Tamaño texto
+                </div>
+                <div class="arrow">Normal</div>
+            </div>
+
+            <div class="item">
+                <div class="left">
+                    <div class="icon"><i class="bi bi-volume-up"></i></div>
+                    Voz
+                </div>
+                <div class="arrow">No</div>
+            </div>
+
+        </div>
+        `);
+    }
+
+    if(tipo==="cambiar"){
+        html = plantillaPanel("Cambiar cuenta",`
+        <div class="section-title">Sesión</div>
+        <div class="card">
+            <div class="item">
+                <div class="left">
+                    <div class="icon"><i class="bi bi-arrow-repeat"></i></div>
+                    Cambiar cuenta
+                </div>
+                <div class="arrow">
+                    <i class="bi bi-chevron-right"></i>
+                </div>
+            </div>
+        </div>
+        `);
+    }
+
+  if(tipo==="cerrar"){
+html = `
+
+<div class="alert-box">
+
+    <div class="alert-icon">
+        <i class="bi bi-exclamation-triangle"></i>
+    </div>
+
+    <div class="alert-title">
+        ¿Estás seguro?
+    </div>
+
+    <div class="alert-text">
+        ¿Deseas cerrar sesión?
+    </div>
+
+    <div class="alert-actions">
+        <button onclick="cerrarModal()" class="btn-cancel">
+            Cancelar
+        </button>
+
+        <button onclick="cerrarSesion()" class="btn-confirm">
+            Cerrar sesión
+        </button>
+    </div>
+
+</div>
+
+`;
+}
+           
+    cont.innerHTML = html;
+    modal.classList.add("active");
+}
+
+
+document.addEventListener("click", e=>{
+    if(e.target.id==="modal"){
+        cerrarModal();
+    }
+});
+
+function cerrarModal(){
+    document.getElementById("modal").classList.remove("active");
+}
+ 
+ function cerrarSesion(){
+    alert("Sesión cerrada correctamente");
+    cerrarModal();
 }
 </script>
 
 </body>
 </html>
+
