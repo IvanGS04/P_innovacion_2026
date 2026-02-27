@@ -4,12 +4,216 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Planeador - Dashboard</title>
-  
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.17/dist/sweetalert2.min.css" rel="stylesheet">
   <link rel="stylesheet" href="./css/styles.css">
+
+  <style>
+
+    :root {
+      --cfg-bg:           #0f1728;
+      --cfg-card:         #121a2b;
+      --cfg-header-bg:    linear-gradient(135deg, #0f1728, #121a2b);
+      --cfg-text:         #e8eefc;
+      --cfg-muted:        #a8b3d9;
+      --cfg-line:         #22304f;
+      --cfg-item-hover:   #1a2a45;
+      --cfg-avatar:       linear-gradient(135deg, #4a72e8, #38d39f);
+      --cfg-icon-bg:      rgba(124,156,255,.12);
+      --cfg-icon-color:   #7c9cff;
+      --cfg-shadow:       0 24px 60px rgba(0,0,0,.55);
+      --cfg-overlay:      rgba(0,0,0,.55);
+      --cfg-danger:       #ff5a7a;
+      --cfg-danger-bg:    rgba(255,90,122,.12);
+      --cfg-cancel-bg:    rgba(255,255,255,.07);
+      --cfg-cancel-hover: rgba(255,255,255,.12);
+    }
+    body.light {
+      --cfg-bg:           #ffffff;
+      --cfg-card:         #f5f8ff;
+      --cfg-header-bg:    linear-gradient(135deg, #eef2ff, #f5f8ff);
+      --cfg-text:         #1a2340;
+      --cfg-muted:        #6b7ba4;
+      --cfg-line:         #d8e2f5;
+      --cfg-item-hover:   #eaf0ff;
+      --cfg-avatar:       linear-gradient(135deg, #4a72e8, #18a97a);
+      --cfg-icon-bg:      rgba(74,114,232,.10);
+      --cfg-icon-color:   #4a72e8;
+      --cfg-shadow:       0 20px 50px rgba(74,114,232,.15), 0 4px 16px rgba(0,0,0,.08);
+      --cfg-overlay:      rgba(10,20,50,.35);
+      --cfg-danger:       #e8365a;
+      --cfg-danger-bg:    rgba(232,54,90,.10);
+      --cfg-cancel-bg:    #e9ecef;
+      --cfg-cancel-hover: #dee2e6;
+    }
+
+   
+    #cfgOverlay {
+      position: fixed; inset: 0;
+      background: var(--cfg-overlay);
+      z-index: 100;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s ease;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+    #cfgOverlay.active { opacity: 1; pointer-events: all; }
+
+   
+    .cfg-panel-base {
+      position: fixed;
+      top: 50%;
+      right: -380px;
+      transform: translateY(-50%);
+      width: 340px;
+      max-height: 90vh;
+      background: var(--cfg-bg);
+      border: 1px solid var(--cfg-line);
+      border-radius: 20px;
+      box-shadow: var(--cfg-shadow);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: right 0.38s cubic-bezier(.4,0,.2,1),
+                  background 0.3s, border-color 0.3s, box-shadow 0.3s;
+    }
+    #cfgPanel { z-index: 101; }
+    #cfgSub   { z-index: 102; }
+    .cfg-panel-base.active { right: 20px; }
+
+    .cfg-scroll { overflow-y: auto; flex: 1; }
+    .cfg-scroll::-webkit-scrollbar { width: 4px; }
+    .cfg-scroll::-webkit-scrollbar-thumb { background: var(--cfg-line); border-radius: 4px; }
+
+    .cfg-header {
+      text-align: center;
+      padding: 28px 16px 16px;
+      border-bottom: 1px solid var(--cfg-line);
+      background: var(--cfg-header-bg);
+      transition: background 0.3s, border-color 0.3s;
+      flex-shrink: 0;
+      position: relative;
+    }
+    .cfg-avatar {
+      width: 68px; height: 68px; border-radius: 50%;
+      background: var(--cfg-avatar);
+      margin: 0 auto 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px; color: #fff;
+      box-shadow: 0 4px 16px rgba(74,114,232,.3);
+    }
+    .cfg-name {
+      margin: 0 0 2px; font-weight: 700; font-size: 15px;
+      color: var(--cfg-text);
+      font-family: var(--font, 'Outfit', sans-serif);
+    }
+    .cfg-username { font-size: 12px; color: var(--cfg-muted); }
+
+    .cfg-section-title {
+      font-size: 11px; font-weight: 600; letter-spacing: .06em;
+      text-transform: uppercase; color: var(--cfg-muted);
+      margin: 18px 16px 6px;
+    }
+
+    .cfg-card {
+      background: var(--cfg-card);
+      margin: 0 12px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--cfg-line);
+      overflow: hidden;
+      transition: background 0.3s, border-color 0.3s;
+    }
+
+    .cfg-item {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      padding: 13px 14px; cursor: pointer;
+      transition: background 0.18s;
+      color: var(--cfg-text); font-size: 13px;
+      font-family: var(--font, 'Outfit', sans-serif);
+    }
+    .cfg-item:hover { background: var(--cfg-item-hover); }
+    .cfg-item:not(:last-child) { border-bottom: 1px solid var(--cfg-line); }
+    .cfg-item-left { display: flex; align-items: center; gap: 10px; }
+
+    .cfg-icon {
+      width: 32px; height: 32px; border-radius: 9px;
+      background: var(--cfg-icon-bg);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; color: var(--cfg-icon-color);
+      flex-shrink: 0; transition: background 0.3s;
+    }
+    .cfg-arrow { color: var(--cfg-muted); font-size: 12px; }
+    .cfg-value  { color: var(--cfg-muted); font-size: 12px; }
+
+    .cfg-close, .cfg-back {
+      position: absolute; top: 14px;
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--cfg-icon-bg); border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--cfg-muted); font-size: 14px;
+      transition: background 0.2s, color 0.2s; z-index: 2;
+    }
+    .cfg-close { right: 16px; }
+    .cfg-back  { left: 16px;  }
+    .cfg-close:hover, .cfg-back:hover { background: var(--cfg-line); color: var(--cfg-text); }
+
+    .cfg-alert { padding: 32px 24px 24px; text-align: center; }
+    .cfg-alert-icon {
+      width: 60px; height: 60px; border-radius: 50%;
+      background: var(--cfg-danger-bg);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px; color: var(--cfg-danger); margin: 0 auto 16px;
+    }
+    .cfg-alert-title {
+      font-weight: 700; font-size: 17px; color: var(--cfg-text);
+      margin: 0 0 8px; font-family: var(--font, 'Outfit', sans-serif);
+    }
+    .cfg-alert-text { color: var(--cfg-muted); font-size: 13px; margin: 0 0 24px; }
+    .cfg-alert-actions { display: flex; gap: 10px; }
+
+    .cfg-btn-cancel {
+      flex: 1; padding: 12px; border: none; border-radius: 10px;
+      background: var(--cfg-cancel-bg); color: var(--cfg-text);
+      cursor: pointer; font-weight: 600; font-size: 13px;
+      font-family: var(--font, 'Outfit', sans-serif);
+      transition: background 0.2s;
+    }
+    .cfg-btn-cancel:hover { background: var(--cfg-cancel-hover); }
+    .cfg-btn-confirm {
+      flex: 1; padding: 12px; border: none; border-radius: 10px;
+      background: var(--cfg-danger); color: #fff;
+      cursor: pointer; font-weight: 600; font-size: 13px;
+      font-family: var(--font, 'Outfit', sans-serif);
+      transition: opacity 0.2s;
+    }
+    .cfg-btn-confirm:hover { opacity: .85; }
+
+    .cfg-toggle { position: relative; width: 40px; height: 22px; flex-shrink: 0; }
+    .cfg-toggle input { opacity: 0; width: 0; height: 0; }
+    .cfg-toggle-track {
+      position: absolute; inset: 0; border-radius: 999px;
+      background: var(--cfg-line); cursor: pointer; transition: background 0.25s;
+    }
+    .cfg-toggle input:checked + .cfg-toggle-track { background: var(--cfg-icon-color); }
+    .cfg-toggle-track::after {
+      content: ''; position: absolute; top: 3px; left: 3px;
+      width: 16px; height: 16px; border-radius: 50%; background: #fff;
+      transition: transform 0.25s;
+    }
+    .cfg-toggle input:checked + .cfg-toggle-track::after { transform: translateX(18px); }
+
+    #btnConfig {
+      font-size: 18px; padding: 8px 12px;
+      line-height: 1; min-width: 46px; justify-content: center;
+    }
+  </style>
 </head>
+
 <body>
   <div class="container">
     <div class="topbar">
@@ -20,24 +224,21 @@
           <p>Parciales / Semana</p>
         </div>
       </div>
-      
       <div class="actions">
         <a class="btn primary" href="./editor.html">+ Nueva planeación</a>
         <button class="btn" id="btnExport">Exportar Planeación</button>
-        <a class="btn" href="./dashboard.html" title="Solo recarga en este prototipo">Recargar</a>
-        
-        
+        <a class="btn" href="./dashboard.html">Recargar</a>
         <button class="btn" id="toogletheme" title="Cambiar tema" aria-label="Cambiar modo claro/oscuro">
           <span id="themeicon">🌙</span>
         </button>
+        <button class="btn" id="btnConfig" title="Configuración" aria-label="Abrir configuración">⚙️</button>
       </div>
     </div>
-    
+
     <div class="grid">
       <div class="card">
         <h2>Planeaciones</h2>
         <p class="hint">Filtra y administra. Abre una para ver/editar/imprimir.</p>
-        
         <div class="row">
           <div class="field">
             <label>Buscar (materia, grupo, docente, periodo)</label>
@@ -60,23 +261,20 @@
             </select>
           </div>
         </div>
-        
         <div class="pills">
           <div class="pill"><span>Total</span><b id="countTotal">0</b></div>
           <div class="pill"><span>Parcial</span><b id="countParcial">0</b></div>
           <div class="pill"><span>Semana</span><b id="countSemana">0</b></div>
         </div>
-        
         <div class="list" id="list"></div>
         <div id="empty" class="notice" style="display:none; margin-top:12px">
           No hay planeaciones todavía. Crea una con "Nueva planeación".
         </div>
       </div>
-      
+
       <div class="card">
         <h2>Plantillas rápidas</h2>
         <p class="hint">Crea una planeación con estructura prellenada.</p>
-        
         <div class="list">
           <div class="item">
             <p class="itemTitle">Planeación Semanal (básica)</p>
@@ -93,7 +291,6 @@
             <p class="itemMeta">Después, podemos agregar: rúbricas, lista de cotejo, exportar a PDF real, y cuentas por docente.</p>
           </div>
         </div>
-        
         <hr class="sep">
         <div class="notice">
           Tip: para imprimir bonito, abre una planeación y presiona <b>Imprimir / PDF</b>.
@@ -101,55 +298,234 @@
       </div>
     </div>
   </div>
+
   
+  <div id="cfgOverlay"></div>
+
   
+  <div id="cfgPanel" class="cfg-panel-base">
+    <button class="cfg-close" id="cfgClose"><i class="bi bi-x"></i></button>
+    <div class="cfg-scroll">
+      <div class="cfg-header">
+        <div class="cfg-avatar"><i class="bi bi-person"></i></div>
+        <p class="cfg-name">Usuario</p>
+        <p class="cfg-username">@usuario.cecytea.edu.mx</p>
+      </div>
+
+      <p class="cfg-section-title">Cuenta</p>
+      <div class="cfg-card">
+        <div class="cfg-item" onclick="abrirSub('cuenta')">
+          <div class="cfg-item-left">
+            <div class="cfg-icon"><i class="bi bi-person-circle"></i></div>Cuenta
+          </div>
+          <div class="cfg-arrow"><i class="bi bi-chevron-right"></i></div>
+        </div>
+      </div>
+
+      <p class="cfg-section-title">Contenido y Pantalla</p>
+      <div class="cfg-card">
+        <div class="cfg-item" onclick="abrirSub('accesibilidad')">
+          <div class="cfg-item-left">
+            <div class="cfg-icon"><i class="bi bi-universal-access"></i></div>Accesibilidad
+          </div>
+          <div class="cfg-arrow"><i class="bi bi-chevron-right"></i></div>
+        </div>
+      </div>
+
+      <p class="cfg-section-title">Inicio de sesión</p>
+      <div class="cfg-card">
+        <div class="cfg-item" onclick="abrirSub('cambiar')">
+          <div class="cfg-item-left">
+            <div class="cfg-icon"><i class="bi bi-arrow-repeat"></i></div>Cambiar de cuenta
+          </div>
+          <div class="cfg-arrow"><i class="bi bi-chevron-right"></i></div>
+        </div>
+        <div class="cfg-item" onclick="abrirSub('cerrar')">
+          <div class="cfg-item-left">
+            <div class="cfg-icon" style="background:var(--cfg-danger-bg); color:var(--cfg-danger)">
+              <i class="bi bi-box-arrow-right"></i>
+            </div>
+            <span style="color:var(--cfg-danger)">Cerrar sesión</span>
+          </div>
+          <div class="cfg-arrow"><i class="bi bi-chevron-right"></i></div>
+        </div>
+      </div>
+      <div style="height:16px"></div>
+    </div>
+  </div>
+
+
+  <div id="cfgSub" class="cfg-panel-base">
+    <div id="cfgSubContent" class="cfg-scroll"></div>
+  </div>
+
+ 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script src="./js/utils.js"></script>
   <script src="./js/storage.js"></script>
   <script src="./js/app-dashboard.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.17/dist/sweetalert2.all.min.js"></script>
-  <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.17/dist/sweetalert2.min.css" rel="stylesheet">
-  
-  <!-- ──  Claro y Oscuro ── -->
+
   <script>
-    (function () {
-      const btn   = document.getElementById('toogletheme');
-      const icon  = document.getElementById('themeicon');
-      const body  = document.body;
-      const KEY   = 'planeador_theme';
-      
-      
-      const ICONS = { dark: '🌙', light: '☀️' };
-      
-      
-      const saved = localStorage.getItem(KEY) || 'dark';
-      applyTheme(saved, false);
-      
-      btn.addEventListener('click', () => {
-        const next = body.classList.contains('light') ? 'dark' : 'light';
-        applyTheme(next, true);
-      });
-      
-      function applyTheme(theme, animate) {
-        if (animate) {
-          
-          btn.style.transform = 'scale(0.85)';
-          setTimeout(() => { btn.style.transform = ''; }, 200);
-        }
-        
-        if (theme === 'light') {
-          body.classList.add('light');
-          icon.textContent = ICONS.light;
-        } else {
-          body.classList.remove('light');
-          icon.textContent = ICONS.dark;
-        }
-        localStorage.setItem(KEY, theme);
+ 
+  (function () {
+    const btn  = document.getElementById('toogletheme');
+    const icon = document.getElementById('themeicon');
+    const body = document.body;
+    const KEY  = 'planeador_theme';
+    const ICONS = { dark: '🌙', light: '☀️' };
+
+    // Cargar preferencia guardada sin animación
+    applyTheme(localStorage.getItem(KEY) || 'dark', false);
+
+    btn.addEventListener('click', () => {
+      applyTheme(body.classList.contains('light') ? 'dark' : 'light', true);
+    });
+
+    function applyTheme(theme, animate) {
+      if (animate) {
+        btn.style.transform = 'scale(0.85)';
+        setTimeout(() => btn.style.transform = '', 200);
       }
-    })();
+      body.classList.toggle('light', theme === 'light');
+      icon.textContent = ICONS[theme];
+      localStorage.setItem(KEY, theme);
+
+     
+      const t = document.getElementById('darkModeToggle');
+      if (t) t.checked = (theme === 'dark');
+    }
+
+   
+    window.applyTheme = applyTheme;
+  })();
+
+
+
+  const cfgPanel   = document.getElementById('cfgPanel');
+  const cfgSub     = document.getElementById('cfgSub');
+  const cfgOverlay = document.getElementById('cfgOverlay');
+
+  document.getElementById('btnConfig').addEventListener('click', () => {
+    cfgPanel.classList.add('active');
+    cfgOverlay.classList.add('active');
+    cfgSub.classList.remove('active');
+  });
+
+  document.getElementById('cfgClose').addEventListener('click', cerrarTodo);
+  cfgOverlay.addEventListener('click', cerrarTodo);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrarTodo(); });
+
+  function cerrarTodo() {
+    cfgPanel.classList.remove('active');
+    cfgSub.classList.remove('active');
+    cfgOverlay.classList.remove('active');
+  }
+
+  function cerrarSub() {
+    cfgSub.classList.remove('active');
+  }
+
+  /* Sub-paneles */
+  function abrirSub(tipo) {
+    const cont = document.getElementById('cfgSubContent');
+    const isDark = !document.body.classList.contains('light');
+    let html = '';
+
+    const header = (icon, nombre, sub) => `
+      <div class="cfg-header" style="position:relative">
+        <button class="cfg-back" onclick="cerrarSub()"><i class="bi bi-arrow-left"></i></button>
+        <button class="cfg-close" onclick="cerrarTodo()"><i class="bi bi-x"></i></button>
+        <div class="cfg-avatar"><i class="bi ${icon}"></i></div>
+        <p class="cfg-name">${nombre}</p>
+        <p class="cfg-username">${sub}</p>
+      </div>`;
+
+    if (tipo === 'cuenta') {
+      html = header('bi-person-circle', 'Cuenta', '@usuario.cecytea.edu.mx') + `
+        <p class="cfg-section-title">Información</p>
+        <div class="cfg-card">
+          <div class="cfg-item">
+            <div class="cfg-item-left"><div class="cfg-icon"><i class="bi bi-envelope"></i></div>Correo</div>
+            <span class="cfg-value">usuario@cecytea.edu.mx</span>
+          </div>
+          <div class="cfg-item">
+            <div class="cfg-item-left"><div class="cfg-icon"><i class="bi bi-telephone"></i></div>Teléfono</div>
+            <span class="cfg-value">449-000-0000</span>
+          </div>
+          <div class="cfg-item">
+            <div class="cfg-item-left"><div class="cfg-icon"><i class="bi bi-lock"></i></div>Contraseña</div>
+            <span class="cfg-value">••••••••</span>
+          </div>
+        </div>
+        <div style="height:16px"></div>`;
+    }
+
+    if (tipo === 'accesibilidad') {
+      html = header('bi-universal-access', 'Accesibilidad', 'Ajusta la experiencia visual') + `
+        <p class="cfg-section-title">Pantalla</p>
+        <div class="cfg-card">
+          <div class="cfg-item">
+            <div class="cfg-item-left"><div class="cfg-icon"><i class="bi bi-moon-stars"></i></div>Modo oscuro</div>
+            <label class="cfg-toggle">
+              <input type="checkbox" id="darkModeToggle" ${isDark ? 'checked' : ''}
+                onchange="window.applyTheme(this.checked ? 'dark' : 'light', true)">
+              <span class="cfg-toggle-track"></span>
+            </label>
+          </div>
+          <div class="cfg-item">
+            <div class="cfg-item-left"><div class="cfg-icon"><i class="bi bi-fonts"></i></div>Tamaño texto</div>
+            <span class="cfg-value">Normal</span>
+          </div>
+          <div class="cfg-item">
+            <div class="cfg-item-left"><div class="cfg-icon"><i class="bi bi-volume-up"></i></div>Voz</div>
+            <span class="cfg-value">No</span>
+          </div>
+        </div>
+        <div style="height:16px"></div>`;
+    }
+
+    if (tipo === 'cambiar') {
+      html = header('bi-arrow-repeat', 'Cambiar cuenta', 'Selecciona otra cuenta') + `
+        <p class="cfg-section-title">Sesión activa</p>
+        <div class="cfg-card">
+          <div class="cfg-item" onclick="alert('Función disponible próximamente')">
+            <div class="cfg-item-left"><div class="cfg-icon"><i class="bi bi-arrow-repeat"></i></div>Cambiar cuenta</div>
+            <div class="cfg-arrow"><i class="bi bi-chevron-right"></i></div>
+          </div>
+        </div>
+        <div style="height:16px"></div>`;
+    }
+
+    if (tipo === 'cerrar') {
+      html = `
+        <div style="position:relative">
+          <button class="cfg-close" onclick="cerrarSub()"><i class="bi bi-x"></i></button>
+          <div class="cfg-alert">
+            <div class="cfg-alert-icon"><i class="bi bi-exclamation-triangle"></i></div>
+            <p class="cfg-alert-title">¿Estás seguro?</p>
+            <p class="cfg-alert-text">Tu sesión se cerrará y tendrás que volver a iniciar sesión.</p>
+            <div class="cfg-alert-actions">
+              <button class="cfg-btn-cancel" onclick="cerrarSub()">Cancelar</button>
+              <button class="cfg-btn-confirm" onclick="cerrarSesion()">Cerrar sesión</button>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    cont.innerHTML = html;
+    cfgSub.classList.add('active');
+  }
+
+  function cerrarSesion() {
+    localStorage.removeItem('loggedIn');
+    cerrarTodo();
+    alert('Sesión cerrada correctamente');
+    window.location.href = 'index.html';
+  }
   </script>
-  
-  
+
+
   <script>
     if (localStorage.getItem("loggedIn") !== "true") {
       alert("Debes iniciar sesión primero");
@@ -158,3 +534,4 @@
   </script>
 </body>
 </html>
+
