@@ -13,7 +13,6 @@
   <link rel="stylesheet" href="./css/styles.css">
 
   <style>
-
     :root {
       --cfg-bg:           #0f1728;
       --cfg-card:         #121a2b;
@@ -51,7 +50,6 @@
       --cfg-cancel-hover: #dee2e6;
     }
 
-   
     #cfgOverlay {
       position: fixed; inset: 0;
       background: var(--cfg-overlay);
@@ -63,21 +61,17 @@
     }
     #cfgOverlay.active { opacity: 1; pointer-events: all; }
 
-   
     .cfg-panel-base {
       position: fixed;
-      top: 50%;
-      right: -380px;
+      top: 50%; right: -380px;
       transform: translateY(-50%);
-      width: 340px;
-      max-height: 90vh;
+      width: 340px; max-height: 90vh;
       background: var(--cfg-bg);
       border: 1px solid var(--cfg-line);
       border-radius: 20px;
       box-shadow: var(--cfg-shadow);
       overflow: hidden;
-      display: flex;
-      flex-direction: column;
+      display: flex; flex-direction: column;
       transition: right 0.38s cubic-bezier(.4,0,.2,1),
                   background 0.3s, border-color 0.3s, box-shadow 0.3s;
     }
@@ -95,8 +89,7 @@
       border-bottom: 1px solid var(--cfg-line);
       background: var(--cfg-header-bg);
       transition: background 0.3s, border-color 0.3s;
-      flex-shrink: 0;
-      position: relative;
+      flex-shrink: 0; position: relative;
     }
     .cfg-avatar {
       width: 68px; height: 68px; border-radius: 50%;
@@ -106,11 +99,7 @@
       font-size: 28px; color: #fff;
       box-shadow: 0 4px 16px rgba(74,114,232,.3);
     }
-    .cfg-name {
-      margin: 0 0 2px; font-weight: 700; font-size: 15px;
-      color: var(--cfg-text);
-      font-family: var(--font, 'Outfit', sans-serif);
-    }
+    .cfg-name { margin: 0 0 2px; font-weight: 700; font-size: 15px; color: var(--cfg-text); font-family: 'Outfit', sans-serif; }
     .cfg-username { font-size: 12px; color: var(--cfg-muted); }
 
     .cfg-section-title {
@@ -118,7 +107,6 @@
       text-transform: uppercase; color: var(--cfg-muted);
       margin: 18px 16px 6px;
     }
-
     .cfg-card {
       background: var(--cfg-card);
       margin: 0 12px 12px;
@@ -127,19 +115,15 @@
       overflow: hidden;
       transition: background 0.3s, border-color 0.3s;
     }
-
     .cfg-item {
-      display: flex; align-items: center;
-      justify-content: space-between;
+      display: flex; align-items: center; justify-content: space-between;
       padding: 13px 14px; cursor: pointer;
       transition: background 0.18s;
-      color: var(--cfg-text); font-size: 13px;
-      font-family: var(--font, 'Outfit', sans-serif);
+      color: var(--cfg-text); font-size: 13px; font-family: 'Outfit', sans-serif;
     }
     .cfg-item:hover { background: var(--cfg-item-hover); }
     .cfg-item:not(:last-child) { border-bottom: 1px solid var(--cfg-line); }
     .cfg-item-left { display: flex; align-items: center; gap: 10px; }
-
     .cfg-icon {
       width: 32px; height: 32px; border-radius: 9px;
       background: var(--cfg-icon-bg);
@@ -159,7 +143,7 @@
       transition: background 0.2s, color 0.2s; z-index: 2;
     }
     .cfg-close { right: 16px; }
-    .cfg-back  { left: 16px;  }
+    .cfg-back  { left: 16px; }
     .cfg-close:hover, .cfg-back:hover { background: var(--cfg-line); color: var(--cfg-text); }
 
     .cfg-alert { padding: 32px 24px 24px; text-align: center; }
@@ -169,26 +153,20 @@
       display: flex; align-items: center; justify-content: center;
       font-size: 26px; color: var(--cfg-danger); margin: 0 auto 16px;
     }
-    .cfg-alert-title {
-      font-weight: 700; font-size: 17px; color: var(--cfg-text);
-      margin: 0 0 8px; font-family: var(--font, 'Outfit', sans-serif);
-    }
-    .cfg-alert-text { color: var(--cfg-muted); font-size: 13px; margin: 0 0 24px; }
+    .cfg-alert-title { font-weight: 700; font-size: 17px; color: var(--cfg-text); margin: 0 0 8px; font-family: 'Outfit', sans-serif; }
+    .cfg-alert-text  { color: var(--cfg-muted); font-size: 13px; margin: 0 0 24px; }
     .cfg-alert-actions { display: flex; gap: 10px; }
-
     .cfg-btn-cancel {
       flex: 1; padding: 12px; border: none; border-radius: 10px;
       background: var(--cfg-cancel-bg); color: var(--cfg-text);
-      cursor: pointer; font-weight: 600; font-size: 13px;
-      font-family: var(--font, 'Outfit', sans-serif);
+      cursor: pointer; font-weight: 600; font-size: 13px; font-family: 'Outfit', sans-serif;
       transition: background 0.2s;
     }
     .cfg-btn-cancel:hover { background: var(--cfg-cancel-hover); }
     .cfg-btn-confirm {
       flex: 1; padding: 12px; border: none; border-radius: 10px;
       background: var(--cfg-danger); color: #fff;
-      cursor: pointer; font-weight: 600; font-size: 13px;
-      font-family: var(--font, 'Outfit', sans-serif);
+      cursor: pointer; font-weight: 600; font-size: 13px; font-family: 'Outfit', sans-serif;
       transition: opacity 0.2s;
     }
     .cfg-btn-confirm:hover { opacity: .85; }
@@ -207,10 +185,7 @@
     }
     .cfg-toggle input:checked + .cfg-toggle-track::after { transform: translateX(18px); }
 
-    #btnConfig {
-      font-size: 18px; padding: 8px 12px;
-      line-height: 1; min-width: 46px; justify-content: center;
-    }
+    #btnConfig { font-size: 18px; padding: 8px 12px; line-height: 1; min-width: 46px; justify-content: center; }
   </style>
 </head>
 
@@ -220,7 +195,7 @@
       <div class="brand">
         <div class="badge">P</div>
         <div>
-          <h1>Planeador CECYTEA</h1>
+          <h1>Planix</h1>
           <p>Parciales / Semana</p>
         </div>
       </div>
@@ -228,9 +203,6 @@
         <a class="btn primary" href="./editor.html">+ Nueva planeación</a>
         <button class="btn" id="btnExport">Exportar Planeación</button>
         <a class="btn" href="./dashboard.html">Recargar</a>
-        <button class="btn" id="toogletheme" title="Cambiar tema" aria-label="Cambiar modo claro/oscuro">
-          <span id="themeicon">🌙</span>
-        </button>
         <button class="btn" id="btnConfig" title="Configuración" aria-label="Abrir configuración">⚙️</button>
       </div>
     </div>
@@ -299,10 +271,8 @@
     </div>
   </div>
 
-  
   <div id="cfgOverlay"></div>
 
-  
   <div id="cfgPanel" class="cfg-panel-base">
     <button class="cfg-close" id="cfgClose"><i class="bi bi-x"></i></button>
     <div class="cfg-scroll">
@@ -315,9 +285,7 @@
       <p class="cfg-section-title">Cuenta</p>
       <div class="cfg-card">
         <div class="cfg-item" onclick="abrirSub('cuenta')">
-          <div class="cfg-item-left">
-            <div class="cfg-icon"><i class="bi bi-person-circle"></i></div>Cuenta
-          </div>
+          <div class="cfg-item-left"><div class="cfg-icon"><i class="bi bi-person-circle"></i></div>Cuenta</div>
           <div class="cfg-arrow"><i class="bi bi-chevron-right"></i></div>
         </div>
       </div>
@@ -325,9 +293,7 @@
       <p class="cfg-section-title">Contenido y Pantalla</p>
       <div class="cfg-card">
         <div class="cfg-item" onclick="abrirSub('accesibilidad')">
-          <div class="cfg-item-left">
-            <div class="cfg-icon"><i class="bi bi-universal-access"></i></div>Accesibilidad
-          </div>
+          <div class="cfg-item-left"><div class="cfg-icon"><i class="bi bi-universal-access"></i></div>Accesibilidad</div>
           <div class="cfg-arrow"><i class="bi bi-chevron-right"></i></div>
         </div>
       </div>
@@ -335,16 +301,12 @@
       <p class="cfg-section-title">Inicio de sesión</p>
       <div class="cfg-card">
         <div class="cfg-item" onclick="abrirSub('cambiar')">
-          <div class="cfg-item-left">
-            <div class="cfg-icon"><i class="bi bi-arrow-repeat"></i></div>Cambiar de cuenta
-          </div>
+          <div class="cfg-item-left"><div class="cfg-icon"><i class="bi bi-arrow-repeat"></i></div>Cambiar de cuenta</div>
           <div class="cfg-arrow"><i class="bi bi-chevron-right"></i></div>
         </div>
         <div class="cfg-item" onclick="abrirSub('cerrar')">
           <div class="cfg-item-left">
-            <div class="cfg-icon" style="background:var(--cfg-danger-bg); color:var(--cfg-danger)">
-              <i class="bi bi-box-arrow-right"></i>
-            </div>
+            <div class="cfg-icon" style="background:var(--cfg-danger-bg);color:var(--cfg-danger)"><i class="bi bi-box-arrow-right"></i></div>
             <span style="color:var(--cfg-danger)">Cerrar sesión</span>
           </div>
           <div class="cfg-arrow"><i class="bi bi-chevron-right"></i></div>
@@ -354,12 +316,10 @@
     </div>
   </div>
 
-
   <div id="cfgSub" class="cfg-panel-base">
     <div id="cfgSubContent" class="cfg-scroll"></div>
   </div>
 
- 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script src="./js/utils.js"></script>
   <script src="./js/storage.js"></script>
@@ -367,41 +327,34 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.17/dist/sweetalert2.all.min.js"></script>
 
   <script>
- 
+  /* ── tema ── */
   (function () {
     const btn  = document.getElementById('toogletheme');
     const icon = document.getElementById('themeicon');
     const body = document.body;
     const KEY  = 'planeador_theme';
-    const ICONS = { dark: '🌙', light: '☀️' };
 
-    // Cargar preferencia guardada sin animación
     applyTheme(localStorage.getItem(KEY) || 'dark', false);
 
-    btn.addEventListener('click', () => {
-      applyTheme(body.classList.contains('light') ? 'dark' : 'light', true);
-    });
+    if (btn) {
+      btn.addEventListener('click', () => {
+        applyTheme(body.classList.contains('light') ? 'dark' : 'light', true);
+      });
+    }
 
     function applyTheme(theme, animate) {
-      if (animate) {
-        btn.style.transform = 'scale(0.85)';
-        setTimeout(() => btn.style.transform = '', 200);
-      }
+      if (animate && btn) { btn.style.transform = 'scale(0.85)'; setTimeout(() => btn.style.transform = '', 200); }
       body.classList.toggle('light', theme === 'light');
-      icon.textContent = ICONS[theme];
+      if (icon) icon.textContent = theme === 'light' ? '☀️' : '🌙';
       localStorage.setItem(KEY, theme);
-
-     
       const t = document.getElementById('darkModeToggle');
       if (t) t.checked = (theme === 'dark');
     }
 
-   
     window.applyTheme = applyTheme;
   })();
 
-
-
+  /* ── panel config ── */
   const cfgPanel   = document.getElementById('cfgPanel');
   const cfgSub     = document.getElementById('cfgSub');
   const cfgOverlay = document.getElementById('cfgOverlay');
@@ -422,20 +375,18 @@
     cfgOverlay.classList.remove('active');
   }
 
-  function cerrarSub() {
-    cfgSub.classList.remove('active');
-  }
+  function cerrarSub() { cfgSub.classList.remove('active'); }
 
-  /* Sub-paneles */
+  /* ── sub-paneles (sin botón X) ── */
   function abrirSub(tipo) {
-    const cont = document.getElementById('cfgSubContent');
+    const cont   = document.getElementById('cfgSubContent');
     const isDark = !document.body.classList.contains('light');
     let html = '';
 
+    /* header solo con flecha de regreso — sin X */
     const header = (icon, nombre, sub) => `
       <div class="cfg-header" style="position:relative">
         <button class="cfg-back" onclick="cerrarSub()"><i class="bi bi-arrow-left"></i></button>
-        <button class="cfg-close" onclick="cerrarTodo()"><i class="bi bi-x"></i></button>
         <div class="cfg-avatar"><i class="bi ${icon}"></i></div>
         <p class="cfg-name">${nombre}</p>
         <p class="cfg-username">${sub}</p>
@@ -498,10 +449,11 @@
     }
 
     if (tipo === 'cerrar') {
+      /* panel cerrar sesión: solo botón de regreso, sin X */
       html = `
         <div style="position:relative">
-          <button class="cfg-close" onclick="cerrarSub()"><i class="bi bi-x"></i></button>
-          <div class="cfg-alert">
+          <button class="cfg-back" style="position:absolute;top:14px;left:16px" onclick="cerrarSub()"><i class="bi bi-arrow-left"></i></button>
+          <div class="cfg-alert" style="padding-top:52px">
             <div class="cfg-alert-icon"><i class="bi bi-exclamation-triangle"></i></div>
             <p class="cfg-alert-title">¿Estás seguro?</p>
             <p class="cfg-alert-text">Tu sesión se cerrará y tendrás que volver a iniciar sesión.</p>
@@ -525,7 +477,6 @@
   }
   </script>
 
-
   <script>
     if (localStorage.getItem("loggedIn") !== "true") {
       alert("Debes iniciar sesión primero");
@@ -534,4 +485,3 @@
   </script>
 </body>
 </html>
-
