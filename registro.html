@@ -2,190 +2,198 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Inicio de sesión</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crear Cuenta - Planix</title>
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
   <style>
+    /* ── base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: linear-gradient(135deg, #0f2a35, #123d52);
+      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      margin: 0;
+      padding: 20px 16px;
     }
 
+    /* ── card ── */
     .wrapper {
       background: #ffffff;
-      padding: 15px 50px;
-      border-radius: 14px;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+      padding: clamp(20px, 5vw, 36px) clamp(18px, 5vw, 44px);
+      border-radius: 16px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
       width: 100%;
-      max-width: 400px;
+      max-width: 440px;
       text-align: center;
-    
     }
 
+    /* ── logo ── */
     .logo {
-      max-width: 120px;
-      margin-bottom: 15px;
+      width: 100%;
+      max-width: clamp(100px, 40vw, 160px);
+      height: auto;
+      object-fit: contain;
+      margin-bottom: 10px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
     }
+    .logo-error { display: none; }
 
+    /* ── título ── */
     h2 {
       color: #0057A3;
-      margin-bottom: 25px;
-      font-size: 22px;
+      margin-bottom: clamp(14px, 3vw, 22px);
+      font-size: clamp(18px, 4.5vw, 22px);
       font-weight: 700;
     }
 
+    /* ── campos ── */
+    .mb-3 { margin-bottom: clamp(10px, 2.5vw, 16px) !important; }
+
     .input-label {
       color: #0057A3;
-      font-size: 13px;
-      margin-bottom: 6px;
+      font-size: clamp(11px, 2.5vw, 13px);
+      margin-bottom: 5px;
       display: block;
       text-align: left;
     }
 
-    .custom-input {
-      position: relative;
-    }
+    .custom-input { position: relative; }
 
     .custom-input .form-control {
       background-color: #e6edf3;
       border: none;
-      border-radius: 18px;
-      padding: 14px 48px;
+      border-radius: 24px;
+      padding: clamp(10px, 2.5vw, 14px) clamp(36px, 8vw, 48px);
       color: #0057A3;
-      font-size: 15px;
+      font-size: clamp(13px, 3vw, 15px);
+      width: 100%;
+      transition: box-shadow 0.2s;
     }
-
-    .custom-input .form-control::placeholder {
-      color: #8fa6b2;
-    }
-
+    .custom-input .form-control::placeholder { color: #8fa6b2; }
     .custom-input .form-control:focus {
       background-color: #e6edf3;
-      box-shadow: none;
+      box-shadow: 0 0 0 3px rgba(0,87,163,0.15);
+      outline: none;
     }
 
     .input-icon-left {
-      position: absolute;
-      left: 18px;
-      top: 50%;
+      position: absolute; left: clamp(12px, 3vw, 18px); top: 50%;
       transform: translateY(-50%);
-      color: #00A651;
-      font-size: 18px;
+      color: #00A651; font-size: clamp(15px, 3.5vw, 18px);
       pointer-events: none;
     }
-
     .input-icon-right {
-      position: absolute;
-      right: 18px;
-      top: 50%;
+      position: absolute; right: clamp(12px, 3vw, 18px); top: 50%;
       transform: translateY(-50%);
-      color: #e6edf3;
-      font-size: 18px;
-      cursor: pointer;
+      color: #8fa6b2; font-size: clamp(15px, 3.5vw, 18px);
+      cursor: pointer; transition: color 0.2s;
+    }
+    .input-icon-right:hover { color: #00A651; }
+
+    /* quitar flechas number */
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    input[type="number"] { -moz-appearance: textfield; appearance: textfield; }
+
+    /* ── recordarme ── */
+    .form-check {
+      text-align: left;
+      margin-bottom: clamp(12px, 3vw, 18px);
+      font-size: clamp(12px, 2.8vw, 14px);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .form-check-input {
+      width: 16px; height: 16px;
+      accent-color: #0057A3; cursor: pointer; flex-shrink: 0;
     }
 
-    .input-icon-right:hover {
-      color: #00A651;
-    }
-
+    /* ── botón registrar ── */
     .botones {
       width: 100%;
-      padding: 14px 0;
+      padding: clamp(11px, 2.5vw, 14px) 0;
       background: linear-gradient(90deg, #0057A3, #00A651);
-      color: white;
-      border: none;
-      border-radius: 25px;
-      font-size: 15px;
+      color: white; border: none; border-radius: 30px;
+      font-size: clamp(13px, 3vw, 15px);
       font-weight: 600;
-      box-shadow: 0 10px 25px rgba(0,87,163,0.4);
-      transition: all 0.3s ease;
+      box-shadow: 0 8px 22px rgba(0,87,163,0.35);
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
     }
-
     .botones:hover {
       transform: translateY(-2px);
-      box-shadow: 0 14px 30px rgba(0,87,163,0.6);
+      box-shadow: 0 12px 28px rgba(0,87,163,0.5);
     }
 
+    /* ── botón google ── */
     .google-btn {
-      margin-top: 15px;
+      margin-top: clamp(10px, 2.5vw, 14px);
       width: 100%;
-      height: 48px;
+      padding: clamp(10px, 2.5vw, 14px) 0;
       background: linear-gradient(180deg, #0f2a35, #0b1e27);
-      border: none;
-      border-radius: 30px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      color: #ffffff;
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-      transition: all 0.3s ease;
+      border: none; border-radius: 30px;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      color: #fff;
+      font-size: clamp(12px, 2.8vw, 14px);
+      font-weight: 500; cursor: pointer;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+      transition: transform 0.2s, box-shadow 0.2s;
     }
-
-    .google-btn img {
-      width: 18px;
-      height: 18px;
-    }
-
+    .google-btn img { width: 18px; height: 18px; flex-shrink: 0; }
     .google-btn:hover {
       transform: translateY(-2px);
-      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.5);
     }
 
+    /* ── link login ── */
     .link-registro {
-      margin-top: 15px;
-      font-size: 14px;
+      margin-top: clamp(12px, 3vw, 16px);
+      font-size: clamp(12px, 2.8vw, 14px);
+      color: #555;
     }
-
     .link-registro a {
-      color: #0057A3;
-      font-weight: bold;
-      text-decoration: none;
+      color: #0057A3; font-weight: 700; text-decoration: none;
+    }
+    .link-registro a:hover { text-decoration: underline; }
+
+    /* ── pantallas muy pequeñas ── */
+    @media (max-width: 360px) {
+      .wrapper { padding: 16px 14px; }
+      h2 { font-size: 17px; }
     }
 
-    .link-registro a:hover {
-      text-decoration: underline;
+    /* ── pantallas muy bajas (landscape móvil) ── */
+    @media (max-height: 600px) {
+      body { align-items: flex-start; }
+      .wrapper { margin: 0 auto; }
+      .mb-3 { margin-bottom: 8px !important; }
+      h2 { margin-bottom: 10px; }
     }
-
-    /* Eliminar las flechas del input tipo number */
-    input[type="number"]::-webkit-outer-spin-button,
-    input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-     margin: 0;
-    }
-
-   input[type="number"] {
-   -moz-appearance: textfield;
-   appearance: none; 
-   }
-
   </style>
 </head>
 
 <body>
-
 <div class="wrapper">
-  <img src="img/logo cecytea.png" alt="Logo CECyTEA" class="logo">
+
+  <img src="img/logo cecytea.png" alt="Logo CECyTEA" class="logo"
+       onerror="this.style.display='none'">
+
   <h2>Crear Cuenta</h2>
 
   <form>
-
 
     <div class="mb-3">
       <label class="input-label">Nombre(s)</label>
       <div class="custom-input">
         <i class="bi bi-person-fill input-icon-left"></i>
-        <input type="text" class="form-control" name="nombre" placeholder="" required>
+        <input type="text" class="form-control" name="nombre" placeholder="Tu nombre" required>
       </div>
     </div>
 
@@ -193,17 +201,17 @@
       <label class="input-label">Apellidos</label>
       <div class="custom-input">
         <i class="bi bi-person-fill input-icon-left"></i>
-        <input type="text" class="form-control" name="apellido_paterno" placeholder="" required>
+        <input type="text" class="form-control" name="apellido_paterno" placeholder="Tus apellidos" required>
       </div>
     </div>
 
     <div class="mb-3">
-  <label class="input-label">Número Telefónico</label>
-  <div class="custom-input">
-    <i class="bi bi-telephone-fill input-icon-left"></i>
-    <input id="telefono" class="form-control" type="number" placeholder="Número Telefónico" required>
-  </div>
-</div>
+      <label class="input-label">Número Telefónico</label>
+      <div class="custom-input">
+        <i class="bi bi-telephone-fill input-icon-left"></i>
+        <input id="telefono" class="form-control" type="number" placeholder="10 dígitos" required>
+      </div>
+    </div>
 
     <div class="mb-3">
       <label class="input-label">Email</label>
@@ -222,9 +230,9 @@
       </div>
     </div>
 
-    <div class="form-check text-start mb-3">
-      <input class="form-check-input" type="checkbox" checked>
-      <label class="form-check-label">Recordarme</label>
+    <div class="form-check mb-3">
+      <input class="form-check-input" type="checkbox" id="remember" checked>
+      <label class="form-check-label" for="remember">Recordarme</label>
     </div>
 
     <button id="boton" type="button" class="botones">Registrar</button>
@@ -237,13 +245,24 @@
   </form>
 
   <div class="link-registro">
-    ¿Ya tienes cuenta?
-    <a href="index.html">Iniciar Sesion</a>
+    ¿Ya tienes cuenta? <a href="planix-final.html">Iniciar Sesión</a>
   </div>
+
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+<script>
+  // toggle contraseña
+  document.getElementById('togglePassword').addEventListener('click', function () {
+    const input = document.getElementById('password');
+    const isPass = input.type === 'password';
+    input.type = isPass ? 'text' : 'password';
+    this.classList.toggle('bi-eye',       !isPass);
+    this.classList.toggle('bi-eye-slash',  isPass);
+  });
+</script>
+
 <script src="js/registro.js"></script>
 </body>
 </html>

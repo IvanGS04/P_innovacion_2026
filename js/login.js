@@ -2,7 +2,7 @@ window.addEventListener('DOMContentLoaded', function () {
 
     const usuario = document.getElementById('usuario');
     const password = document.getElementById('password');
-    const btn = document.getElementById('button');
+    const btn = document.getElementById('btnLogin');
 
     if (btn) {
         btn.addEventListener('click', function () {

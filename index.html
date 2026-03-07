@@ -1,212 +1,419 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Inicio de sesión</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Planix</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+<style>
 
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #0f2a35, #123d52);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    .wrapper {
-      background: #ffffff;
-      padding: 40px 30px;
-      border-radius: 14px;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.25);
-      width: 100%;
-      max-width: 400px;
-      text-align: center;
-    }
+:root {
+  --dark:     #0d1b2a;
+  --darker:   #08111c;
+  --green-1:  #43e97b;
+  --green-2:  #38f9d7;
+  --teal:     #4dd0e1;
+  --blue:     #0057A3;
+  --white:    #ffffff;
+  --soft:     rgba(255,255,255,0.55);
+}
 
-    .logo {
-      max-width: 120px;
-      margin-bottom: 15px;
-    }
+html, body {
+  width: 100%; height: 100%;
+  background: var(--darker);
+  font-family: 'Outfit', sans-serif;
+  overflow: hidden;
+}
 
-    h2 {
-      color: #0057A3;
-      margin-bottom: 25px;
-      font-size: 22px;
-      font-weight: 700;
-    }
 
-    .input-label {
-      color: #0057A3;
-      font-size: 13px;
-      margin-bottom: 6px;
-      display: block;
-      text-align: left;
-    }
+#splash {
+  position: fixed; inset: 0;
+  background: var(--darker);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  z-index: 100;
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+#splash.hide {
+  opacity: 0;
+  transform: scale(1.04);
+  pointer-events: none;
+}
 
-    .custom-input {
-      position: relative;
-    }
+.grid-bg {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(67,233,123,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(67,233,123,0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+  opacity: 0;
+  animation: gridFadeIn 1.5s 0.3s forwards, gridDrift 25s 0.3s linear infinite;
+}
+@keyframes gridFadeIn { to { opacity: 1; } }
+@keyframes gridDrift  { 100% { background-position: 48px 48px; } }
 
-    .custom-input .form-control {
-      background-color: #e6edf3;
-      border: none;
-      border-radius: 18px;
-      padding: 14px 48px;
-      color: #0057A3;
-      font-size: 15px;
-    }
+.glow-orb {
+  position: absolute;
+  width: 560px; height: 560px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(67,233,123,0.12) 0%, transparent 70%);
+  opacity: 0;
+  animation: orbAppear 1s 0.5s forwards, orbPulse 4s 1.5s ease-in-out infinite;
+}
+@keyframes orbAppear { to { opacity: 1; } }
+@keyframes orbPulse  { 0%,100%{transform:scale(1)} 50%{transform:scale(1.12)} }
 
-    .custom-input .form-control::placeholder {
-      color: #8fa6b2;
-    }
+.float-icons { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.fi {
+  position: absolute; font-size: 22px; opacity: 0;
+  animation: floatUp var(--dur) ease var(--delay) infinite;
+  color: rgba(67,233,123,0.25);
+}
+@keyframes floatUp {
+  0%   { opacity: 0; transform: translateY(0) rotate(0deg); }
+  15%  { opacity: 1; }
+  85%  { opacity: 0.6; }
+  100% { opacity: 0; transform: translateY(-160px) rotate(20deg); }
+}
 
-    .custom-input .form-control:focus {
-      background-color: #e6edf3;
-      box-shadow: none;
-    }
+.logo-wrap {
+  position: relative; z-index: 2;
+  display: flex; align-items: center; gap: 24px;
+  flex-wrap: wrap; justify-content: center;
+}
 
-    .input-icon-left {
-      position: absolute;
-      left: 18px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #00A651;
-      font-size: 18px;
-      pointer-events: none;
-    }
 
-    .input-icon-right {
-      position: absolute;
-      right: 18px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #e6edf3;
-      font-size: 18px;
-      cursor: pointer;
-    }
+.hex-icon {
+  width: 90px; height: 90px; opacity: 0;
+  transform: scale(0.4) rotate(-30deg);
+  animation: hexReveal 0.9s cubic-bezier(0.34,1.56,0.64,1) 0.8s forwards;
+  flex-shrink: 0;
+}
+@keyframes hexReveal { to { opacity:1; transform: scale(1) rotate(0deg); } }
+.hex-icon svg { width:100%; height:100%; filter: drop-shadow(0 0 18px rgba(67,233,123,0.5)); }
 
-    .input-icon-right:hover {
-      color: #00A651;
-    }
+.check-path {
+  stroke-dasharray: 60; stroke-dashoffset: 60;
+  animation: drawCheck 0.5s ease 1.7s forwards;
+}
+@keyframes drawCheck { to { stroke-dashoffset: 0; } }
 
-    .botones {
-      width: 100%;
-      padding: 14px 0;
-      background: linear-gradient(90deg, #0057A3, #00A651);
-      color: white;
-      border: none;
-      border-radius: 25px;
-      font-size: 15px;
-      font-weight: 600;
-      box-shadow: 0 10px 25px rgba(0,87,163,0.4);
-      transition: all 0.3s ease;
-    }
+.brand-name {
+  font-size: clamp(40px, 8vw, 64px);
+  font-weight: 800; letter-spacing: 4px; color: var(--white); overflow: hidden;
+}
+.brand-name span { display:inline-block; opacity:0; transform:translateY(40px); }
+.brand-name span:nth-child(1){animation:letterUp .5s cubic-bezier(.34,1.56,.64,1) 1.20s forwards}
+.brand-name span:nth-child(2){animation:letterUp .5s cubic-bezier(.34,1.56,.64,1) 1.28s forwards}
+.brand-name span:nth-child(3){animation:letterUp .5s cubic-bezier(.34,1.56,.64,1) 1.36s forwards}
+.brand-name span:nth-child(4){animation:letterUp .5s cubic-bezier(.34,1.56,.64,1) 1.44s forwards}
+.brand-name span:nth-child(5){animation:letterUp .5s cubic-bezier(.34,1.56,.64,1) 1.52s forwards}
+.brand-name span:nth-child(6){animation:letterUp .5s cubic-bezier(.34,1.56,.64,1) 1.60s forwards}
+@keyframes letterUp { to { opacity:1; transform:translateY(0); } }
 
-    .botones:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 14px 30px rgba(0,87,163,0.6);
-    }
 
-    .google-btn {
-      margin-top: 15px;
-      width: 100%;
-      height: 48px;
-      background: linear-gradient(180deg, #0f2a35, #0b1e27);
-      border: none;
-      border-radius: 30px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      color: #ffffff;
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-      transition: all 0.3s ease;
-    }
+.tagline {
+  margin-top: 20px; font-size: clamp(11px, 2vw, 15px);
+  font-weight: 300; letter-spacing: 3.5px;
+  text-transform: uppercase; color: var(--soft);
+  opacity: 0; animation: fadeSlideUp 0.8s ease 2s forwards;
+}
+@keyframes fadeSlideUp {
+  from { opacity:0; transform:translateY(12px); }
+  to   { opacity:1; transform:translateY(0); }
+}
 
-    .google-btn img {
-      width: 18px;
-      height: 18px;
-    }
 
-    .google-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.6);
-    }
+.progress-track {
+  position: absolute; bottom: 60px;
+  width: min(200px, 60vw); height: 2px;
+  background: rgba(255,255,255,0.08); border-radius: 2px; overflow: hidden;
+  opacity: 0; animation: fadeIn 0.4s ease 1.8s forwards;
+}
+.progress-fill {
+  height: 100%; width: 0%; border-radius: 2px;
+  background: linear-gradient(90deg, var(--green-1), var(--teal));
+  animation: fillBar 2.5s cubic-bezier(0.4,0,0.2,1) 2s forwards;
+  box-shadow: 0 0 8px rgba(67,233,123,0.6);
+}
+@keyframes fillBar { to { width:100%; } }
+@keyframes fadeIn  { to { opacity:1; } }
 
-    .link-registro {
-      margin-top: 15px;
-      font-size: 14px;
-    }
 
-    .link-registro a {
-      color: #0057A3;
-      font-weight: bold;
-      text-decoration: none;
-    }
+#app {
+  position: fixed; inset: 0;
+  background: linear-gradient(135deg, #0f2a35, #123d52);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.8s ease 0.2s;
+  padding: 16px;
+  overflow-y: auto;
+}
+#app.show { opacity:1; pointer-events:all; }
 
-    .link-registro a:hover {
-      text-decoration: underline;
-    }
-  </style>
+
+.wrapper {
+  background: #ffffff;
+  padding: clamp(24px, 5vw, 40px) clamp(20px, 5vw, 36px);
+  border-radius: 16px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+  width: 100%;
+  max-width: 420px;
+  text-align: center;
+  opacity: 0; transform: translateY(20px);
+  animation: cardUp 0.7s cubic-bezier(0.34,1.2,0.64,1) 0.3s forwards;
+}
+@keyframes cardUp { to { opacity:1; transform:translateY(0); } }
+
+
+.card-logo-row {
+  display: flex; align-items: center; justify-content: center;
+  gap: 10px; margin-bottom: 6px;
+}
+.card-logo-row svg { width: 36px; height: 36px; flex-shrink: 0; }
+.card-logo-name {
+  font-size: clamp(22px, 5vw, 28px);
+  font-weight: 800; letter-spacing: 3px; color: var(--blue);
+}
+
+/* logo cecyte */
+.cecyte-logo {
+  width: 100%; max-width: 280px;
+  height: auto; object-fit: contain;
+  margin: 0 auto 20px;
+  display: block;
+}
+
+.card-title {
+  color: var(--blue); font-size: clamp(16px, 4vw, 22px);
+  font-weight: 700; margin-bottom: 22px;
+}
+
+.input-label {
+  color: var(--blue); font-size: 13px;
+  margin-bottom: 6px; display: block; text-align: left;
+}
+
+.field-wrap { margin-bottom: 16px; }
+
+.custom-input { position: relative; }
+.custom-input input {
+  width: 100%;
+  background: #e6edf3;
+  border: none; border-radius: 24px;
+  padding: 13px 48px;
+  color: var(--blue); font-size: 15px;
+  font-family: 'Outfit', sans-serif;
+  outline: none;
+  transition: box-shadow 0.2s;
+}
+.custom-input input::placeholder { color: #8fa6b2; }
+.custom-input input:focus { box-shadow: 0 0 0 3px rgba(0,87,163,0.15); }
+
+.icon-left {
+  position: absolute; left: 16px; top: 50%;
+  transform: translateY(-50%);
+  color: #00A651; font-size: 17px; pointer-events: none;
+}
+.icon-right {
+  position: absolute; right: 16px; top: 50%;
+  transform: translateY(-50%);
+  color: #8fa6b2; font-size: 17px; cursor: pointer;
+  transition: color 0.2s;
+}
+.icon-right:hover { color: #00A651; }
+
+.remember-row {
+  display: flex; align-items: center; gap: 8px;
+  text-align: left; margin-bottom: 18px;
+  font-size: 14px; color: #555;
+}
+.remember-row input[type="checkbox"] {
+  width: 16px; height: 16px; accent-color: var(--blue); cursor: pointer;
+}
+
+.btn-login {
+  width: 100%; padding: 14px 0;
+  background: linear-gradient(90deg, #0057A3, #00A651);
+  color: white; border: none; border-radius: 30px;
+  font-size: 15px; font-weight: 700;
+  font-family: 'Outfit', sans-serif;
+  letter-spacing: 0.5px; cursor: pointer;
+  box-shadow: 0 8px 24px rgba(0,87,163,0.35);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn-login:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(0,87,163,0.5);
+}
+
+.btn-google {
+  margin-top: 12px; width: 100%; height: 48px;
+  background: linear-gradient(180deg, #0f2a35, #0b1e27);
+  border: none; border-radius: 30px;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  color: #fff; font-size: 14px; font-weight: 500;
+  font-family: 'Outfit', sans-serif;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn-google:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.5);
+}
+.btn-google svg { flex-shrink:0; }
+
+.link-registro {
+  margin-top: 16px; font-size: 14px; color: #555;
+}
+.link-registro a { color: var(--blue); font-weight: 700; text-decoration: none; }
+.link-registro a:hover { text-decoration: underline; }
+
+@media (max-width: 400px) {
+  .card-logo-name { letter-spacing: 1.5px; }
+  .wrapper { border-radius: 12px; }
+  .btn-login, .btn-google { font-size: 13px; padding: 12px 0; }
+}
+@media (max-height: 650px) {
+  .wrapper { padding: 20px; }
+  .field-wrap { margin-bottom: 10px; }
+  .card-title { margin-bottom: 14px; }
+  .cecyte-logo { max-width: 200px; margin-bottom: 12px; }
+}
+</style>
 </head>
-
 <body>
 
-<div class="wrapper">
-   <h2 style="font-size: xx-large;">Planix</h2>
-  <img style="width: 600px; height: 50px;" src="img/CECyTE-Aguascalientes.png" alt="Logo CECyTEA" class="logo">
+<div id="splash">
+  <div class="grid-bg"></div>
+  <div class="glow-orb"></div>
+  <div class="float-icons" id="floatIcons"></div>
 
-
- 
-
-  <form method="POST">
-
-    <div class="mb-3">
-      <label class="input-label">Email</label>
-      <div class="custom-input">
-        <i class="bi bi-envelope-fill input-icon-left"></i>
-        <input type="text" class="form-control" id="usuario" placeholder="name@cecytea.edu.mx" required>
+  <div style="position:relative;z-index:2;text-align:center;padding:0 16px">
+    <div class="logo-wrap">
+      <div class="hex-icon">
+        <svg viewBox="0 0 100 100" fill="none">
+          <defs>
+            <linearGradient id="hg" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#43e97b"/>
+              <stop offset="100%" stop-color="#38c9a8"/>
+            </linearGradient>
+          </defs>
+          <polygon points="50,4 93,27.5 93,72.5 50,96 7,72.5 7,27.5" fill="url(#hg)"/>
+          <polyline class="check-path" points="28,52 44,68 72,36"
+            stroke="white" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>
+      </div>
+      <div class="brand-name">
+        <span>P</span><span>L</span><span>A</span><span>N</span><span>I</span><span>X</span>
       </div>
     </div>
+    <p class="tagline">Planeaciones docentes inteligentes</p>
+  </div>
 
-    <div class="mb-3">
-      <label class="input-label">Contraseña</label>
-      <div class="custom-input">
-        <i class="bi bi-lock-fill input-icon-left"></i>
-        <input type="password" class="form-control" id="password" placeholder="••••••••" required>
-        <i class="bi bi-eye input-icon-right" id="togglePassword"></i>
-      </div>
-    </div>
-
-    <div class="form-check text-start mb-3">
-      <input class="form-check-input" type="checkbox" checked>
-      <label class="form-check-label">Recordarme</label>
-    </div>
-
-    <button type="button" id="button" class="botones">Iniciar sesión</button>
-
-    <button type="button" class="google-btn">
-      <img src="img/google.png" alt="Google">
-      Iniciar con Google
-    </button>
-
-  </form>
-
-  <div class="link-registro">
-    ¿No tienes cuenta?
-    <a href="registro.html">Crear Cuenta</a>
+  <div class="progress-track">
+    <div class="progress-fill"></div>
   </div>
 </div>
 
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+<div id="app">
+  <div class="wrapper">
+
+    <div class="card-logo-row">
+      <svg viewBox="0 0 100 100" fill="none">
+        <defs>
+          <linearGradient id="hg2" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#43e97b"/>
+            <stop offset="100%" stop-color="#38c9a8"/>
+          </linearGradient>
+        </defs>
+        <polygon points="50,4 93,27.5 93,72.5 50,96 7,72.5 7,27.5" fill="url(#hg2)"/>
+        <polyline points="28,52 44,68 72,36" stroke="white" stroke-width="9"
+          stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </svg>
+      <span class="card-logo-name">PLANIX</span>
+    </div>
+
+    <img src="img/CECyTE-Aguascalientes.png" alt="CECyTEA" class="cecyte-logo"
+         onerror="this.style.display='none'">
+
+    <div class="card-title">Iniciar sesión</div>
+
+    <div class="field-wrap">
+      <label class="input-label">Email</label>
+      <div class="custom-input">
+        <i class="bi bi-envelope-fill icon-left"></i>
+        <input type="email" id="usuario" placeholder="name@cecytea.edu.mx" required>
+      </div>
+    </div>
+
+    <div class="field-wrap">
+      <label class="input-label">Contraseña</label>
+      <div class="custom-input">
+        <i class="bi bi-lock-fill icon-left"></i>
+        <input type="password" id="password" placeholder="••••••••" required>
+        <i class="bi bi-eye icon-right" id="togglePassword"></i>
+      </div>
+    </div>
+
+    <div class="remember-row">
+      <input type="checkbox" id="remember" checked>
+      <label for="remember">Recordarme</label>
+    </div>
+
+    <button type="button" id="btnLogin" class="btn-login">Iniciar sesión</button>
+
+    <button type="button" class="btn-google">
+      <svg width="18" height="18" viewBox="0 0 48 48">
+        <path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.2l6.8-6.8C35.7 2.2 30.2 0 24 0 14.6 0 6.6 5.4 2.7 13.3l7.9 6.1C12.5 13.3 17.8 9.5 24 9.5z"/>
+        <path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h12.7c-.6 3-2.3 5.5-4.8 7.2l7.6 5.9c4.4-4.1 7-10.1 7-17.1z"/>
+        <path fill="#FBBC05" d="M10.6 28.6A14.6 14.6 0 0 1 9.5 24c0-1.6.3-3.2.8-4.6L2.7 13.3A24 24 0 0 0 0 24c0 3.9.9 7.5 2.7 10.7l7.9-6.1z"/>
+        <path fill="#34A853" d="M24 48c6.2 0 11.4-2 15.2-5.4l-7.6-5.9c-2 1.4-4.6 2.2-7.6 2.2-6.2 0-11.5-3.8-13.4-9.3l-7.9 6.1C6.6 42.6 14.6 48 24 48z"/>
+      </svg>
+      Iniciar con Google
+    </button>
+
+    <div class="link-registro">
+      ¿No tienes cuenta? <a href="registro.html">Crear Cuenta</a>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const icons = ['📚','✏️','📐','🎯','📋','🗓️','📝','🖊️','📊','🔬'];
+const floatContainer = document.getElementById('floatIcons');
+icons.forEach((icon, i) => {
+  const el = document.createElement('div');
+  el.className = 'fi';
+  el.textContent = icon;
+  el.style.left   = (8 + Math.random() * 84) + '%';
+  el.style.bottom = (5 + Math.random() * 30) + '%';
+  el.style.setProperty('--dur',   (4 + Math.random() * 4) + 's');
+  el.style.setProperty('--delay', (2 + i * 0.3 + Math.random() * 1) + 's');
+  floatContainer.appendChild(el);
+});
+
+setTimeout(() => {
+  document.getElementById('splash').classList.add('hide');
+  document.getElementById('app').classList.add('show');
+}, 4800);
+
+document.getElementById('togglePassword').addEventListener('click', function(){
+  const input = document.getElementById('password');
+  const isPass = input.type === 'password';
+  input.type = isPass ? 'text' : 'password';
+  this.classList.toggle('bi-eye', !isPass);
+  this.classList.toggle('bi-eye-slash', isPass);
+});
+</script>
+
+<!-- scripts del primer index Jandel -->
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 <script src="js/login.js"></script>
 </body>
 </html>
