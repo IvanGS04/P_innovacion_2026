@@ -4,14 +4,14 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Planeador - Dashboard</title>
-<link rel="icon" type="image/x-icon" href="img/planix-icon-64.png">
+  <link rel="icon" type="image/x-icon" href="img/planix-icon-64.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
   <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.17/dist/sweetalert2.min.css" rel="stylesheet">
   <link rel="stylesheet" href="./css/styles.css">
-
+  
   <style>
     :root {
       --cfg-bg:           #0f1728;
@@ -49,7 +49,7 @@
       --cfg-cancel-bg:    #e9ecef;
       --cfg-cancel-hover: #dee2e6;
     }
-
+    
     #cfgOverlay {
       position: fixed; inset: 0;
       background: var(--cfg-overlay);
@@ -60,7 +60,7 @@
       -webkit-backdrop-filter: blur(4px);
     }
     #cfgOverlay.active { opacity: 1; pointer-events: all; }
-
+    
     .cfg-panel-base {
       position: fixed;
       top: 50%; right: -380px;
@@ -73,16 +73,16 @@
       overflow: hidden;
       display: flex; flex-direction: column;
       transition: right 0.38s cubic-bezier(.4,0,.2,1),
-                  background 0.3s, border-color 0.3s, box-shadow 0.3s;
+      background 0.3s, border-color 0.3s, box-shadow 0.3s;
     }
     #cfgPanel { z-index: 101; }
     #cfgSub   { z-index: 102; }
     .cfg-panel-base.active { right: 20px; }
-
+    
     .cfg-scroll { overflow-y: auto; flex: 1; }
     .cfg-scroll::-webkit-scrollbar { width: 4px; }
     .cfg-scroll::-webkit-scrollbar-thumb { background: var(--cfg-line); border-radius: 4px; }
-
+    
     .cfg-header {
       text-align: center;
       padding: 28px 16px 16px;
@@ -101,7 +101,7 @@
     }
     .cfg-name { margin: 0 0 2px; font-weight: 700; font-size: 15px; color: var(--cfg-text); font-family: 'Outfit', sans-serif; }
     .cfg-username { font-size: 12px; color: var(--cfg-muted); }
-
+    
     .cfg-section-title {
       font-size: 11px; font-weight: 600; letter-spacing: .06em;
       text-transform: uppercase; color: var(--cfg-muted);
@@ -133,7 +133,7 @@
     }
     .cfg-arrow { color: var(--cfg-muted); font-size: 12px; }
     .cfg-value  { color: var(--cfg-muted); font-size: 12px; }
-
+    
     .cfg-close, .cfg-back {
       position: absolute; top: 14px;
       width: 28px; height: 28px; border-radius: 50%;
@@ -145,7 +145,7 @@
     .cfg-close { right: 16px; }
     .cfg-back  { left: 16px; }
     .cfg-close:hover, .cfg-back:hover { background: var(--cfg-line); color: var(--cfg-text); }
-
+    
     .cfg-alert { padding: 32px 24px 24px; text-align: center; }
     .cfg-alert-icon {
       width: 60px; height: 60px; border-radius: 50%;
@@ -170,7 +170,7 @@
       transition: opacity 0.2s;
     }
     .cfg-btn-confirm:hover { opacity: .85; }
-
+    
     .cfg-toggle { position: relative; width: 40px; height: 22px; flex-shrink: 0; }
     .cfg-toggle input { opacity: 0; width: 0; height: 0; }
     .cfg-toggle-track {
@@ -184,7 +184,7 @@
       transition: transform 0.25s;
     }
     .cfg-toggle input:checked + .cfg-toggle-track::after { transform: translateX(18px); }
-
+    
     #btnConfig { font-size: 18px; padding: 8px 12px; line-height: 1; min-width: 46px; justify-content: center; }
   </style>
 </head>
@@ -193,21 +193,22 @@
   <div class="container">
     <div class="topbar">
       <div class="brand">
-         <img src="img/planix-icon-256.png" alt="" style="height: 50px; width: 50px;">
+        <img src="img/planix-icon-256.png" alt="" style="height: 50px; width: 50px;">
         <div>
-         
+          
           <h1>Planix</h1>
           <p>Parciales / Semana</p> 
         </div>
       </div>
       <div class="actions">
         <a class="btn primary" href="./editor.html">+ Nueva planeación</a>
+        <a class="btn primary" href="./editor-evaluacion.html">+ Nueva evaluación</a>
         <button class="btn" id="btnExport">Exportar Planeación</button>
         <a class="btn" href="./dashboard.html">Recargar</a>
         <button class="btn" id="btnConfig" title="Configuración" aria-label="Abrir configuración">⚙️</button>
       </div>
     </div>
-
+    
     <div class="grid">
       <div class="card">
         <h2>Planeaciones</h2>
@@ -244,7 +245,7 @@
           No hay planeaciones todavía. Crea una con "Nueva planeación".
         </div>
       </div>
-
+      
       <div class="card">
         <h2>Plantillas rápidas</h2>
         <p class="hint">Crea una planeación con estructura prellenada.</p>
@@ -271,9 +272,9 @@
       </div>
     </div>
   </div>
-
+  
   <div id="cfgOverlay"></div>
-
+  
   <div id="cfgPanel" class="cfg-panel-base">
     <button class="cfg-close" id="cfgClose"><i class="bi bi-x"></i></button>
     <div class="cfg-scroll">
@@ -282,7 +283,7 @@
         <p class="cfg-name">Usuario</p>
         <p class="cfg-username">@usuario.cecytea.edu.mx</p>
       </div>
-
+      
       <p class="cfg-section-title">Cuenta</p>
       <div class="cfg-card">
         <div class="cfg-item" onclick="abrirSub('cuenta')">
@@ -290,7 +291,7 @@
           <div class="cfg-arrow"><i class="bi bi-chevron-right"></i></div>
         </div>
       </div>
-
+      
       <p class="cfg-section-title">Contenido y Pantalla</p>
       <div class="cfg-card">
         <div class="cfg-item" onclick="abrirSub('accesibilidad')">
@@ -298,7 +299,7 @@
           <div class="cfg-arrow"><i class="bi bi-chevron-right"></i></div>
         </div>
       </div>
-
+      
       <p class="cfg-section-title">Inicio de sesión</p>
       <div class="cfg-card">
         <div class="cfg-item" onclick="abrirSub('cambiar')">
@@ -316,85 +317,83 @@
       <div style="height:16px"></div>
     </div>
   </div>
-
+  
   <div id="cfgSub" class="cfg-panel-base">
     <div id="cfgSubContent" class="cfg-scroll"></div>
   </div>
-
+  
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script src="./js/utils.js"></script>
   <script src="./js/storage.js"></script>
   <script src="./js/app-dashboard.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.17/dist/sweetalert2.all.min.js"></script>
-
+  
   <script>
-  /* ── tema ── */
-  (function () {
-    const btn  = document.getElementById('toogletheme');
-    const icon = document.getElementById('themeicon');
-    const body = document.body;
-    const KEY  = 'planeador_theme';
-
-    applyTheme(localStorage.getItem(KEY) || 'dark', false);
-
-    if (btn) {
-      btn.addEventListener('click', () => {
-        applyTheme(body.classList.contains('light') ? 'dark' : 'light', true);
-      });
+    (function () {
+      const btn  = document.getElementById('toogletheme');
+      const icon = document.getElementById('themeicon');
+      const body = document.body;
+      const KEY  = 'planeador_theme';
+      
+      applyTheme(localStorage.getItem(KEY) || 'dark', false);
+      
+      if (btn) {
+        btn.addEventListener('click', () => {
+          applyTheme(body.classList.contains('light') ? 'dark' : 'light', true);
+        });
+      }
+      
+      function applyTheme(theme, animate) {
+        if (animate && btn) { btn.style.transform = 'scale(0.85)'; setTimeout(() => btn.style.transform = '', 200); }
+        body.classList.toggle('light', theme === 'light');
+        if (icon) icon.textContent = theme === 'light' ? '☀️' : '🌙';
+        localStorage.setItem(KEY, theme);
+        const t = document.getElementById('darkModeToggle');
+        if (t) t.checked = (theme === 'dark');
+      }
+      
+      window.applyTheme = applyTheme;
+    })();
+    
+    const cfgPanel   = document.getElementById('cfgPanel');
+    const cfgSub     = document.getElementById('cfgSub');
+    const cfgOverlay = document.getElementById('cfgOverlay');
+    
+    document.getElementById('btnConfig').addEventListener('click', () => {
+      cfgPanel.classList.add('active');
+      cfgOverlay.classList.add('active');
+      cfgSub.classList.remove('active');
+    });
+    
+    document.getElementById('cfgClose').addEventListener('click', cerrarTodo);
+    cfgOverlay.addEventListener('click', cerrarTodo);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrarTodo(); });
+    
+    function cerrarTodo() {
+      cfgPanel.classList.remove('active');
+      cfgSub.classList.remove('active');
+      cfgOverlay.classList.remove('active');
     }
-
-    function applyTheme(theme, animate) {
-      if (animate && btn) { btn.style.transform = 'scale(0.85)'; setTimeout(() => btn.style.transform = '', 200); }
-      body.classList.toggle('light', theme === 'light');
-      if (icon) icon.textContent = theme === 'light' ? '☀️' : '🌙';
-      localStorage.setItem(KEY, theme);
-      const t = document.getElementById('darkModeToggle');
-      if (t) t.checked = (theme === 'dark');
-    }
-
-    window.applyTheme = applyTheme;
-  })();
-
-  /* ── panel config ── */
-  const cfgPanel   = document.getElementById('cfgPanel');
-  const cfgSub     = document.getElementById('cfgSub');
-  const cfgOverlay = document.getElementById('cfgOverlay');
-
-  document.getElementById('btnConfig').addEventListener('click', () => {
-    cfgPanel.classList.add('active');
-    cfgOverlay.classList.add('active');
-    cfgSub.classList.remove('active');
-  });
-
-  document.getElementById('cfgClose').addEventListener('click', cerrarTodo);
-  cfgOverlay.addEventListener('click', cerrarTodo);
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrarTodo(); });
-
-  function cerrarTodo() {
-    cfgPanel.classList.remove('active');
-    cfgSub.classList.remove('active');
-    cfgOverlay.classList.remove('active');
-  }
-
-  function cerrarSub() { cfgSub.classList.remove('active'); }
-
-  /* ── sub-paneles (sin botón X) ── */
-  function abrirSub(tipo) {
-    const cont   = document.getElementById('cfgSubContent');
-    const isDark = !document.body.classList.contains('light');
-    let html = '';
-
-    /* header solo con flecha de regreso — sin X */
-    const header = (icon, nombre, sub) => `
+    
+    function cerrarSub() { cfgSub.classList.remove('active'); }
+    
+  
+    function abrirSub(tipo) {
+      const cont   = document.getElementById('cfgSubContent');
+      const isDark = !document.body.classList.contains('light');
+      let html = '';
+      
+   
+      const header = (icon, nombre, sub) => `
       <div class="cfg-header" style="position:relative">
         <button class="cfg-back" onclick="cerrarSub()"><i class="bi bi-arrow-left"></i></button>
         <div class="cfg-avatar"><i class="bi ${icon}"></i></div>
         <p class="cfg-name">${nombre}</p>
         <p class="cfg-username">${sub}</p>
       </div>`;
-
-    if (tipo === 'cuenta') {
-      html = header('bi-person-circle', 'Cuenta', '@usuario.cecytea.edu.mx') + `
+      
+      if (tipo === 'cuenta') {
+        html = header('bi-person-circle', 'Cuenta', '@usuario.cecytea.edu.mx') + `
         <p class="cfg-section-title">Información</p>
         <div class="cfg-card">
           <div class="cfg-item">
@@ -411,10 +410,10 @@
           </div>
         </div>
         <div style="height:16px"></div>`;
-    }
-
-    if (tipo === 'accesibilidad') {
-      html = header('bi-universal-access', 'Accesibilidad', 'Ajusta la experiencia visual') + `
+      }
+      
+      if (tipo === 'accesibilidad') {
+        html = header('bi-universal-access', 'Accesibilidad', 'Ajusta la experiencia visual') + `
         <p class="cfg-section-title">Pantalla</p>
         <div class="cfg-card">
           <div class="cfg-item">
@@ -435,10 +434,10 @@
           </div>
         </div>
         <div style="height:16px"></div>`;
-    }
-
-    if (tipo === 'cambiar') {
-      html = header('bi-arrow-repeat', 'Cambiar cuenta', 'Selecciona otra cuenta') + `
+      }
+      
+      if (tipo === 'cambiar') {
+        html = header('bi-arrow-repeat', 'Cambiar cuenta', 'Selecciona otra cuenta') + `
         <p class="cfg-section-title">Sesión activa</p>
         <div class="cfg-card">
           <div class="cfg-item" onclick="alert('Función disponible próximamente')">
@@ -447,11 +446,11 @@
           </div>
         </div>
         <div style="height:16px"></div>`;
-    }
-
-    if (tipo === 'cerrar') {
-      /* panel cerrar sesión: solo botón de regreso, sin X */
-      html = `
+      }
+      
+      if (tipo === 'cerrar') {
+        /* panel cerrar sesión: solo botón de regreso, sin X */
+        html = `
         <div style="position:relative">
           <button class="cfg-back" style="position:absolute;top:14px;left:16px" onclick="cerrarSub()"><i class="bi bi-arrow-left"></i></button>
           <div class="cfg-alert" style="padding-top:52px">
@@ -464,20 +463,20 @@
             </div>
           </div>
         </div>`;
+      }
+      
+      cont.innerHTML = html;
+      cfgSub.classList.add('active');
     }
-
-    cont.innerHTML = html;
-    cfgSub.classList.add('active');
-  }
-
-  function cerrarSesion() {
-    localStorage.removeItem('loggedIn');
-    cerrarTodo();
-    alert('Sesión cerrada correctamente');
-    window.location.href = 'index.html';
-  }
+    
+    function cerrarSesion() {
+      localStorage.removeItem('loggedIn');
+      cerrarTodo();
+      alert('Sesión cerrada correctamente');
+      window.location.href = 'index.html';
+    }
   </script>
-
+  
   <script>
     if (localStorage.getItem("loggedIn") !== "true") {
       alert("Debes iniciar sesión primero");

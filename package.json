@@ -1,0 +1,28 @@
+{
+  "name": "planeador",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IvanGS04/P_innovacion_2026.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/IvanGS04/P_innovacion_2026/issues"
+  },
+  "homepage": "https://github.com/IvanGS04/P_innovacion_2026#readme",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.0",
+    "express": "^5.2.1",
+    "node-fetch": "^3.3.2"
+  }
+}
