@@ -565,7 +565,7 @@ document.getElementById('btnGenerar').addEventListener('click', async () => {
   hideStatus();
 
   try {
-    const res = await fetch("http://localhost:3000/generar-evaluacion", {
+    const res = await fetch("http://192.168.0.20:3000/generar-evaluacion", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

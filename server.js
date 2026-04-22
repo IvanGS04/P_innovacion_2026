@@ -81,7 +81,7 @@ Formato:
 
     const data = await response.json();
 
-    console.log("🔎 RESPUESTA COMPLETA:\n", JSON.stringify(data, null, 2));
+    console.log(" RESPUESTA COMPLETA:\n", JSON.stringify(data, null, 2));
 
     const text = data?.choices?.[0]?.message?.content;
 
@@ -90,7 +90,7 @@ Formato:
       return res.status(500).json({ error: "La IA no devolvió contenido" });
     }
 
-    console.log("🧠 TEXTO IA:\n", text);
+    console.log(" TEXTO IA:\n", text);
 
     // 🔥 limpiar respuesta
     const clean = text
@@ -101,7 +101,7 @@ Formato:
     const match = clean.match(/\{[\s\S]*\}/);
 
     if (!match) {
-      console.log("❌ NO JSON ENCONTRADO:", clean);
+      console.log(" NO JSON ENCONTRADO:", clean);
       return res.status(500).json({ error: "No se encontró JSON en la respuesta" });
     }
 
@@ -109,16 +109,16 @@ Formato:
       const json = JSON.parse(match[0]);
       return res.json(json);
     } catch (err) {
-      console.log("❌ ERROR PARSEANDO:\n", match[0]);
+      console.log("ERROR PARSEANDO:\n", match[0]);
       return res.status(500).json({ error: "JSON inválido" });
     }
 
   } catch (error) {
-    console.log("❌ ERROR GENERAL:", error);
+    console.log(" ERROR GENERAL:", error);
     res.status(500).json({ error: "Error generando evaluación" });
   }
 });
 
-app.listen(3000, () => {
-  console.log("🚀 Servidor en http://localhost:3000");
+app.listen(3000, "0.0.0.0", () => {
+  console.log("🚀 Servidor en http://0.0.0.0:3000");
 });
