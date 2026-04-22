@@ -565,7 +565,7 @@ document.getElementById('btnGenerar').addEventListener('click', async () => {
   hideStatus();
 
   try {
-    const res = await fetch("pinnovacion2026-production.up.railway.app", {
+    const res = await fetch("https://pinnovacion2026-production.up.railway.app/generar-evaluacion", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
