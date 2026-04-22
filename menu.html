@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Menú</title>
+
+<!-- FUENTE PRO -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+    --font: 'Inter', sans-serif;
+}
+
+body{
+    font-family: var(--font);
+    background:#e9edf5;
+    margin:0;
+}
+
+/* HEADER */
+.header{
+    margin:20px;
+    padding:15px 25px;
+    background:#f4f6fb;
+    border-radius:18px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border:1px solid #dfe3ec;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.logo-icon{
+    width:35px;
+    height:35px;
+    background:#f97316;
+    border-radius:10px;
+}
+
+.logo h3{
+    margin:0;
+    font-size:16px;
+}
+
+/* CONTENEDOR */
+.container{
+    max-width:500px;
+    margin:60px auto;
+}
+
+/* CARD PRINCIPAL */
+.card{
+    background:#f8fafc;
+    border-radius:20px;
+    padding:30px;
+    border:1px solid #dfe3ec;
+    box-shadow:0 10px 25px rgba(0,0,0,0.05);
+    text-align:center;
+}
+
+/* TITULOS */
+.title{
+    font-size:20px;
+    font-weight:600;
+    margin-bottom:5px;
+}
+
+.subtitle{
+    font-size:14px;
+    color:#6b7280;
+    margin-bottom:25px;
+}
+
+/* BOTONES */
+.menu-btn{
+    display:block;
+    width:100%;
+    padding:18px;
+    margin-bottom:15px;
+    border-radius:14px;
+    border:1px solid #dfe3ec;
+    background:white;
+    font-weight:500;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.menu-btn:hover{
+    border-color:#3b82f6;
+    transform:translateY(-2px);
+}
+
+/* BOTON PRINCIPAL */
+.menu-btn.primary{
+    background:#f97316;
+    color:white;
+    border:none;
+}
+
+.menu-btn.primary:hover{
+    background:#ea580c;
+}
+
+/* RESPONSIVE */
+@media(max-width:600px){
+    .container{
+        margin:30px 15px;
+    }
+}
+</style>
+
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header">
+    <div class="logo">
+        <div class="logo-icon"></div>
+        <div>
+            <h3>CECYTE</h3>
+            <small style="color:#6b7280;">Sistema escolar</small>
+        </div>
+    </div>
+
+    <div>☰</div>
+</div>
+
+<!-- CONTENIDO -->
+<div class="container">
+    <div class="card">
+
+        <div class="title">Bienvenido, IvanGS1</div>
+        <div class="subtitle">Selecciona una opción</div>
+
+        <button class="menu-btn primary" onclick="location.href='constancia.html'">
+            📄 Constancia de estudios
+        </button>
+
+        <button class="menu-btn" onclick="location.href='historial.html'">
+            📊 Historial académico
+        </button>
+
+        <button class="menu-btn">
+            🧾 Boleta de calificaciones
+        </button>
+
+    </div>
+</div>
+
+</body>
+</html>
