@@ -61,7 +61,7 @@ Formato:
         "X-Title": "Planeador IA"
       },
       body: JSON.stringify({
-        // ✅ MODELO CORREGIDO
+      
         model: "meta-llama/llama-3-8b-instruct",
 
         messages: [
@@ -86,13 +86,13 @@ Formato:
     const text = data?.choices?.[0]?.message?.content;
 
     if (!text) {
-      console.log("❌ RESPUESTA VACÍA:", data);
+      console.log(" RESPUESTA VACÍA:", data);
       return res.status(500).json({ error: "La IA no devolvió contenido" });
     }
 
     console.log(" TEXTO IA:\n", text);
 
-    // 🔥 limpiar respuesta
+     
     const clean = text
       .replace(/```json/g, "")
       .replace(/```/g, "")
@@ -120,5 +120,5 @@ Formato:
 });
 
 app.listen(3000, "0.0.0.0", () => {
-  console.log("🚀 Servidor en http://0.0.0.0:3000");
+  console.log(" Servidor en http://0.0.0.0:3000");
 });

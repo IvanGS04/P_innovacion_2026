@@ -1,0 +1,1213 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Planeador - Planeación</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.17/dist/sweetalert2.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ══════════════════════════════════════
+       VARIABLES — MODO OSCURO
+    ══════════════════════════════════════ */
+    :root {
+      --bg:          #0b1220;
+      --card:        #121a2b;
+      --card2:       #0f1728;
+      --text:        #e8eefc;
+      --muted:       #a8b3d9;
+      --line:        #22304f;
+      --accent:      #7c9cff;
+      --danger:      #ff5a7a;
+      --ok:          #38d39f;
+      --shadow:      0 10px 30px rgba(0,0,0,.35);
+      --font:        'Outfit', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      --btn-bg:      rgba(15,23,40,0.7);
+      --input-bg:    rgba(15,23,40,0.75);
+      --topbar-bg:   linear-gradient(180deg,rgba(18,26,43,0.9),rgba(18,26,43,0.6));
+      --body-grad1:  rgba(124,156,255,0.25);
+      --body-grad2:  rgba(56,211,159,0.18);
+      --notice-bg:   rgba(124,156,255,0.10);
+      --notice-border: rgba(124,156,255,0.55);
+      --item-bg:     rgba(15,23,40,0.65);
+
+      --cfg-bg:           #0f1728;
+      --cfg-card:         #121a2b;
+      --cfg-header-bg:    linear-gradient(135deg,#0f1728,#121a2b);
+      --cfg-text:         #e8eefc;
+      --cfg-muted:        #a8b3d9;
+      --cfg-line:         #22304f;
+      --cfg-item-hover:   #1a2a45;
+      --cfg-avatar:       linear-gradient(135deg,#4a72e8,#38d39f);
+      --cfg-icon-bg:      rgba(124,156,255,.12);
+      --cfg-icon-color:   #7c9cff;
+      --cfg-shadow:       0 24px 60px rgba(0,0,0,.55);
+      --cfg-overlay:      rgba(0,0,0,.55);
+      --cfg-danger:       #ff5a7a;
+      --cfg-danger-bg:    rgba(255,90,122,.12);
+      --cfg-cancel-bg:    rgba(255,255,255,.07);
+      --cfg-cancel-hover: rgba(255,255,255,.12);
+    }
+
+    /* ══════════════════════════════════════
+       VARIABLES — MODO CLARO
+    ══════════════════════════════════════ */
+    body.light {
+      --bg:          #f0f4fc;
+      --card:        #ffffff;
+      --card2:       #f7f9ff;
+      --text:        #1a2340;
+      --muted:       #6b7ba4;
+      --line:        #d0d9f0;
+      --accent:      #4a72e8;
+      --danger:      #e8365a;
+      --ok:          #18a97a;
+      --shadow:      0 8px 24px rgba(74,114,232,0.10),0 2px 8px rgba(0,0,0,.06);
+      --btn-bg:      rgba(255,255,255,0.85);
+      --input-bg:    #ffffff;
+      --topbar-bg:   linear-gradient(180deg,rgba(255,255,255,0.97),rgba(245,248,255,0.95));
+      --body-grad1:  rgba(74,114,232,0.08);
+      --body-grad2:  rgba(24,169,122,0.07);
+      --notice-bg:   rgba(74,114,232,0.07);
+      --notice-border: rgba(74,114,232,0.4);
+      --item-bg:     #f7f9ff;
+
+      --cfg-bg:           #ffffff;
+      --cfg-card:         #f5f8ff;
+      --cfg-header-bg:    linear-gradient(135deg,#eef2ff,#f5f8ff);
+      --cfg-text:         #1a2340;
+      --cfg-muted:        #6b7ba4;
+      --cfg-line:         #d8e2f5;
+      --cfg-item-hover:   #eaf0ff;
+      --cfg-avatar:       linear-gradient(135deg,#4a72e8,#18a97a);
+      --cfg-icon-bg:      rgba(74,114,232,.10);
+      --cfg-icon-color:   #4a72e8;
+      --cfg-shadow:       0 20px 50px rgba(74,114,232,.15),0 4px 16px rgba(0,0,0,.08);
+      --cfg-overlay:      rgba(10,20,50,.35);
+      --cfg-danger:       #e8365a;
+      --cfg-danger-bg:    rgba(232,54,90,.10);
+      --cfg-cancel-bg:    #e9ecef;
+      --cfg-cancel-hover: #dee2e6;
+    }
+
+    /* ══════════════════════════════════════
+       BASE
+    ══════════════════════════════════════ */
+    *,*::before,*::after { box-sizing:border-box; }
+    * { transition: background-color .35s ease, border-color .3s ease, color .3s ease, box-shadow .3s ease; }
+    .btn { transition: background-color .3s, border-color .2s, color .3s, box-shadow .2s, transform .15s !important; }
+
+    body {
+      margin:0; font-family:var(--font); color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 20% -10%,var(--body-grad1),transparent 60%),
+        radial-gradient(900px 500px at 90% 0%,var(--body-grad2),transparent 60%),
+        var(--bg);
+      min-height:100vh;
+    }
+    a { color:inherit; text-decoration:none; }
+
+    /* ══════════════════════════════════════
+       TOPBAR
+    ══════════════════════════════════════ */
+    .topbar {
+      display:flex; gap:12px; align-items:center; justify-content:space-between;
+      padding:14px 32px;
+      border-bottom:1px solid var(--line);
+      background:var(--topbar-bg);
+      position:sticky; top:0;
+      backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+      z-index:20;
+    }
+    .brand { display:flex; gap:10px; align-items:center; }
+    .badge {
+      width:40px; height:40px; border-radius:12px;
+      background:rgba(124,156,255,0.18); border:1px solid rgba(124,156,255,0.35);
+      display:grid; place-items:center; font-weight:800; font-size:18px; color:var(--accent);
+    }
+    body.light .badge { background:rgba(74,114,232,0.12); border-color:rgba(74,114,232,0.3); }
+    .brand h1 { font-size:16px; margin:0; font-weight:700; letter-spacing:-.3px; }
+    .brand p  { font-size:12px; margin:2px 0 0; color:var(--muted); }
+    .actions  { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+
+    /* ══════════════════════════════════════
+       BOTONES TOPBAR
+    ══════════════════════════════════════ */
+    .btn {
+      border:1px solid var(--line); background:var(--btn-bg); color:var(--text);
+      padding:10px 14px; border-radius:12px; cursor:pointer;
+      display:inline-flex; gap:8px; align-items:center;
+      font-size:13px; font-family:var(--font); font-weight:500;
+    }
+    .btn:hover { border-color:rgba(124,156,255,0.45); transform:translateY(-1px); box-shadow:0 4px 12px rgba(74,114,232,.15); }
+    body.light .btn:hover { border-color:rgba(74,114,232,0.4); }
+    .btn:active { transform:translateY(0); }
+    .btn.primary { background:rgba(124,156,255,0.18); border-color:rgba(124,156,255,0.45); font-weight:600; color:var(--accent); }
+    body.light .btn.primary { background:rgba(74,114,232,0.12); border-color:rgba(74,114,232,0.4); }
+    .btn.ok { background:rgba(56,211,159,0.12); border-color:rgba(56,211,159,0.35); color:var(--ok); }
+    body.light .btn.ok { background:rgba(24,169,122,0.08); border-color:rgba(24,169,122,0.3); }
+    #btnConfig { font-size:18px; padding:8px 12px; line-height:1; min-width:46px; justify-content:center; }
+
+    /* ══════════════════════════════════════
+       CONTENEDOR CENTRADO
+    ══════════════════════════════════════ */
+    .container {
+       width: 100%;
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 32px 30px;
+    }
+
+    /* ══════════════════════════════════════
+       CARDS BASE
+    ══════════════════════════════════════ */
+    .pe-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 24px 28px;
+      margin-bottom: 18px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    }
+
+    .pe-card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .pe-card-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      background: rgba(124,156,255,0.15);
+      border: 1px solid rgba(124,156,255,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+    body.light .pe-card-icon { background:rgba(74,114,232,0.10); border-color:rgba(74,114,232,0.2); }
+
+    .pe-card-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin: 0;
+      letter-spacing: -0.2px;
+    }
+
+    .pe-card-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin: 2px 0 0;
+    }
+
+    /* ══════════════════════════════════════
+       CARD IA — DESTACADA
+    ══════════════════════════════════════ */
+    .pe-ai-card {
+      background: var(--card);
+      border: 1px solid rgba(124,156,255,0.35);
+      border-radius: 18px;
+      padding: 24px 28px;
+      margin-bottom: 18px;
+      box-shadow: 0 2px 20px rgba(124,156,255,0.08);
+      position: relative;
+      overflow: hidden;
+    }
+    .pe-ai-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--ok));
+      border-radius: 18px 18px 0 0;
+    }
+
+    .pe-ai-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(124,156,255,0.12);
+      border: 1px solid rgba(124,156,255,0.3);
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    /* ══════════════════════════════════════
+       GRIDS
+    ══════════════════════════════════════ */
+    .pe-grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    .pe-grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
+    @media(max-width:700px){
+      .pe-grid-2,.pe-grid-3 { grid-template-columns:1fr; }
+    }
+
+    /* ══════════════════════════════════════
+       CAMPOS
+    ══════════════════════════════════════ */
+    .pe-field { display:flex; flex-direction:column; gap:6px; }
+    .pe-label { font-size:12px; font-weight:600; color:var(--muted); letter-spacing:0.02em; }
+
+    input, select, textarea {
+      border:1px solid var(--line); background:var(--input-bg); color:var(--text);
+      border-radius:12px; padding:10px 13px; outline:none;
+      font-family:var(--font); font-size:13px; width:100%;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color:var(--accent); box-shadow:0 0 0 3px rgba(124,156,255,0.15);
+    }
+    body.light input:focus, body.light select:focus, body.light textarea:focus {
+      box-shadow:0 0 0 3px rgba(74,114,232,0.12);
+    }
+    textarea { min-height:100px; resize:vertical; }
+
+    /* ══════════════════════════════════════
+       NIVEL EDUCATIVO — SELECTOR CARDS
+    ══════════════════════════════════════ */
+    .nivel-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    @media(max-width:600px){ .nivel-grid { grid-template-columns:1fr; } }
+
+    .nivel-card {
+      border: 1px solid var(--line);
+      background: var(--input-bg);
+      border-radius: 14px;
+      padding: 20px 16px;
+      cursor: pointer;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      transition: border-color .2s, background .2s, transform .15s, box-shadow .2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .nivel-card::before {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0; height: 3px;
+      border-radius: 0 0 14px 14px;
+      opacity: 0;
+      transition: opacity .25s;
+    }
+    .nivel-card.n-basico::before   { background: linear-gradient(90deg,#38d39f,#2bb88a); }
+    .nivel-card.n-media::before    { background: linear-gradient(90deg,#7c9cff,#4a72e8); }
+    .nivel-card.n-superior::before { background: linear-gradient(90deg,#f5a623,#e88a00); }
+
+    .nivel-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    }
+    .nivel-card.selected {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+    }
+    .nivel-card.selected::before { opacity: 1; }
+
+    .nivel-card.n-basico.selected   { border-color: rgba(56,211,159,0.55);  background: rgba(56,211,159,0.07); }
+    .nivel-card.n-media.selected    { border-color: rgba(124,156,255,0.55); background: rgba(124,156,255,0.07); }
+    .nivel-card.n-superior.selected { border-color: rgba(245,166,35,0.55);  background: rgba(245,166,35,0.07); }
+
+    .nivel-img {
+      width: 72px;
+      height: 72px;
+      object-fit: contain;
+      transition: transform .2s;
+    }
+    .nivel-card:hover .nivel-img { transform: scale(1.07); }
+
+    .nivel-badge {
+      display: inline-flex;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .n-basico   .nivel-badge { background: rgba(56,211,159,0.12);  color: #38d39f; border:1px solid rgba(56,211,159,0.3); }
+    .n-media    .nivel-badge { background: rgba(124,156,255,0.12); color: var(--accent); border:1px solid rgba(124,156,255,0.3); }
+    .n-superior .nivel-badge { background: rgba(245,166,35,0.12);  color: #f5a623; border:1px solid rgba(245,166,35,0.3); }
+
+    .nivel-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .nivel-desc {
+      font-size: 11.5px;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+    .nivel-check {
+      width: 22px; height: 22px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; opacity: 0;
+      transition: opacity .2s;
+    }
+    .n-basico   .nivel-check { background: rgba(56,211,159,0.2);  color: #38d39f; }
+    .n-media    .nivel-check { background: rgba(124,156,255,0.2); color: var(--accent); }
+    .n-superior .nivel-check { background: rgba(245,166,35,0.2);  color: #f5a623; }
+    .nivel-card.selected .nivel-check { opacity: 1; }
+
+    /* ══════════════════════════════════════
+       NOTICE
+    ══════════════════════════════════════ */
+    .notice {
+      padding:11px 16px; border:1px dashed var(--notice-border);
+      background:var(--notice-bg); color:var(--muted);
+      border-radius:14px; font-size:13px;
+    }
+
+    /* ══════════════════════════════════════
+       LOADING
+    ══════════════════════════════════════ */
+    .loading-bar { height:3px; border-radius:999px; overflow:hidden; background:var(--line); margin-top:14px; }
+    .loading-bar-inner {
+      height:100%; width:40%;
+      background:linear-gradient(90deg,var(--accent),var(--ok)); border-radius:999px;
+      animation:slide 1.4s ease-in-out infinite;
+    }
+    @keyframes slide { 0%{transform:translateX(-100%)} 100%{transform:translateX(350%)} }
+    .dots { display:inline-flex; gap:4px; align-items:center; }
+    .dots span { width:6px; height:6px; border-radius:50%; background:var(--accent); animation:dot .8s ease-in-out infinite; }
+    .dots span:nth-child(2){animation-delay:.15s} .dots span:nth-child(3){animation-delay:.30s}
+    @keyframes dot { 0%,80%,100%{transform:scale(.55);opacity:.4} 40%{transform:scale(1);opacity:1} }
+
+    /* ══════════════════════════════════════
+       STATS
+    ══════════════════════════════════════ */
+    .stats-row { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:18px; }
+    .stat-pill {
+      flex:1; min-width:120px; border:1px solid var(--line); border-radius:12px;
+      padding:12px 16px; background:var(--input-bg); display:flex; flex-direction:column; gap:2px;
+    }
+    .stat-val { font-size:22px; font-weight:800; color:var(--accent); line-height:1; }
+    .stat-lbl { font-size:11px; color:var(--muted); }
+
+    /* ══════════════════════════════════════
+       PREGUNTAS
+    ══════════════════════════════════════ */
+    .preguntas-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(  1080px, 1fr));
+      gap: 14px;
+    }
+    @media(max-width:600px){ .preguntas-grid { grid-template-columns:1fr; } }
+
+    .pregunta-item {
+      border:1px solid var(--line); background:var(--item-bg); border-radius:14px; overflow:hidden;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    body.light .pregunta-item { background:#fff; border-color:#dde6f7; }
+    .pregunta-item:hover { border-color:rgba(124,156,255,0.35); box-shadow:0 4px 16px rgba(74,114,232,.08); }
+
+    .pregunta-head { display:flex; align-items:flex-start; gap:10px; padding:14px 14px 8px; }
+    .pregunta-num {
+      min-width:26px; height:26px; border-radius:8px;
+      background:rgba(124,156,255,0.14); color:var(--accent);
+      display:grid; place-items:center; font-size:11px; font-weight:800; flex-shrink:0;
+    }
+    .pregunta-texto { font-size:13px; font-weight:600; flex:1; line-height:1.45; }
+    .pts-badge {
+      font-size:10px; padding:3px 9px; border-radius:999px; white-space:nowrap;
+      background:rgba(56,211,159,0.10); border:1px solid rgba(56,211,159,0.28); color:var(--ok); font-weight:700;
+    }
+    .pregunta-meta { padding:0 14px 8px 50px; display:flex; gap:6px; }
+    .tipo-tag { font-size:10px; padding:2px 9px; border-radius:999px; border:1px solid var(--line); color:var(--muted); }
+    .opciones { padding:0 14px 10px 50px; display:flex; flex-direction:column; gap:5px; }
+    .opcion {
+      font-size:12px; padding:7px 11px; border-radius:9px;
+      border:1px solid var(--line); background:var(--input-bg); color:var(--text);
+    }
+    .opcion.correcta { border-color:rgba(56,211,159,0.45); background:rgba(56,211,159,0.08); color:var(--ok); }
+    .respuesta-area {
+      margin:0 14px 10px 50px; padding:9px 11px; border-radius:9px;
+      border:1px dashed var(--line); background:var(--input-bg);
+      font-size:12px; color:var(--muted); min-height:56px;
+    }
+    .pregunta-foot { padding:6px 14px 12px 50px; display:flex; gap:6px; flex-wrap:wrap; }
+    .mini-btn {
+      border:1px solid var(--line); background:var(--btn-bg); color:var(--muted);
+      padding:5px 10px; border-radius:8px; cursor:pointer; font-size:11px; font-family:var(--font);
+      transition: color .2s, border-color .2s;
+    }
+    .mini-btn:hover { color:var(--danger); border-color:rgba(255,90,122,.3); }
+    .mini-btn.edit:hover { color:var(--accent); border-color:rgba(124,156,255,.4); }
+
+    /* ══════════════════════════════════════
+       AI STATUS
+    ══════════════════════════════════════ */
+    #aiStatus {
+      margin-top: 12px; padding: 10px 14px; border-radius: 11px;
+      font-size: 13px; background: var(--card2); border: 1px solid var(--line);
+      color: var(--muted); display: none;
+    }
+
+    /* ══════════════════════════════════════
+       BOTONES INTERNOS
+    ══════════════════════════════════════ */
+    .pe-btn {
+      border:1px solid var(--line); background:var(--btn-bg); color:var(--text);
+      padding:10px 16px; border-radius:12px; cursor:pointer;
+      display:inline-flex; gap:8px; align-items:center;
+      font-size:13px; font-family:var(--font); font-weight:500;
+      white-space:nowrap;
+      transition: border-color .2s, transform .15s, box-shadow .2s;
+    }
+    .pe-btn:hover { border-color:rgba(124,156,255,0.45); transform:translateY(-1px); box-shadow:0 4px 12px rgba(74,114,232,.12); }
+    .pe-btn:active { transform:translateY(0); }
+    .pe-btn.ai-btn { background:rgba(124,156,255,0.13); border-color:rgba(124,156,255,0.4); color:var(--accent); font-weight:600; }
+    .pe-btn.danger-btn { background:rgba(255,90,122,0.10); border-color:rgba(255,90,122,0.3); color:var(--danger); }
+
+    /* ══════════════════════════════════════
+       MODAL EDITOR DE PREGUNTA
+    ══════════════════════════════════════ */
+    .modal-overlay {
+      position:fixed; inset:0; background:rgba(0,0,0,0.6);
+      z-index:200; display:flex; align-items:center; justify-content:center;
+      backdrop-filter:blur(6px); opacity:0; pointer-events:none;
+      transition:opacity .25s;
+    }
+    .modal-overlay.active { opacity:1; pointer-events:all; }
+    .modal-box {
+      background:var(--card); border:1px solid var(--line); border-radius:20px;
+      width:min(620px, 95vw); max-height:90vh; overflow-y:auto;
+      padding:28px; box-shadow:0 24px 60px rgba(0,0,0,.5);
+      transform:translateY(20px); transition:transform .25s;
+    }
+    .modal-overlay.active .modal-box { transform:translateY(0); }
+    .modal-title { font-size:16px; font-weight:700; margin:0 0 20px; color:var(--text); }
+    .modal-field { display:flex; flex-direction:column; gap:6px; margin-bottom:16px; }
+    .modal-field label { font-size:12px; color:var(--muted); font-weight:500; }
+    .opcion-row { display:flex; gap:8px; align-items:center; margin-bottom:8px; }
+    .opcion-row input[type=text] { flex:1; }
+    .opcion-row input[type=radio] { cursor:pointer; accent-color:var(--ok); width:16px; height:16px; }
+    .opcion-correcta-label { font-size:11px; color:var(--muted); white-space:nowrap; }
+    .modal-actions { display:flex; gap:10px; justify-content:flex-end; margin-top:20px; }
+
+    /* ══════════════════════════════════════
+       CONFIG PANEL
+    ══════════════════════════════════════ */
+    #cfgOverlay {
+      position:fixed; inset:0; background:var(--cfg-overlay);
+      z-index:100; opacity:0; pointer-events:none;
+      transition:opacity .3s ease; backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
+    }
+    #cfgOverlay.active { opacity:1; pointer-events:all; }
+    .cfg-panel-base {
+      position:fixed; top:50%; right:-380px; transform:translateY(-50%);
+      width:340px; max-height:90vh; background:var(--cfg-bg);
+      border:1px solid var(--cfg-line); border-radius:20px; box-shadow:var(--cfg-shadow);
+      overflow:hidden; display:flex; flex-direction:column;
+      transition:right .38s cubic-bezier(.4,0,.2,1), background .3s, border-color .3s, box-shadow .3s;
+    }
+    #cfgPanel { z-index:101; } #cfgSub { z-index:102; }
+    .cfg-panel-base.active { right:20px; }
+    .cfg-scroll { overflow-y:auto; flex:1; }
+    .cfg-scroll::-webkit-scrollbar { width:4px; }
+    .cfg-scroll::-webkit-scrollbar-thumb { background:var(--cfg-line); border-radius:4px; }
+    .cfg-header { text-align:center; padding:28px 16px 16px; border-bottom:1px solid var(--cfg-line); background:var(--cfg-header-bg); flex-shrink:0; position:relative; }
+    .cfg-avatar { width:68px; height:68px; border-radius:50%; background:var(--cfg-avatar); margin:0 auto 10px; display:flex; align-items:center; justify-content:center; font-size:28px; color:#fff; box-shadow:0 4px 16px rgba(74,114,232,.3); }
+    .cfg-name { margin:0 0 2px; font-weight:700; font-size:15px; color:var(--cfg-text); }
+    .cfg-username { font-size:12px; color:var(--cfg-muted); }
+    .cfg-section-title { font-size:11px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--cfg-muted); margin:18px 16px 6px; }
+    .cfg-card { background:var(--cfg-card); margin:0 12px 12px; border-radius:14px; border:1px solid var(--cfg-line); overflow:hidden; }
+    .cfg-item { display:flex; align-items:center; justify-content:space-between; padding:13px 14px; cursor:pointer; transition:background .18s; color:var(--cfg-text); font-size:13px; }
+    .cfg-item:hover { background:var(--cfg-item-hover); }
+    .cfg-item:not(:last-child) { border-bottom:1px solid var(--cfg-line); }
+    .cfg-item-left { display:flex; align-items:center; gap:10px; }
+    .cfg-icon { width:32px; height:32px; border-radius:9px; background:var(--cfg-icon-bg); display:flex; align-items:center; justify-content:center; font-size:15px; color:var(--cfg-icon-color); flex-shrink:0; }
+    .cfg-arrow,.cfg-value { color:var(--cfg-muted); font-size:12px; }
+    .cfg-close,.cfg-back { position:absolute; top:14px; width:28px; height:28px; border-radius:50%; background:var(--cfg-icon-bg); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--cfg-muted); font-size:14px; z-index:2; }
+    .cfg-close { right:16px; } .cfg-back { left:16px; }
+    .cfg-close:hover,.cfg-back:hover { background:var(--cfg-line); color:var(--cfg-text); }
+    .cfg-alert { padding:32px 24px 24px; text-align:center; }
+    .cfg-alert-icon { width:60px; height:60px; border-radius:50%; background:var(--cfg-danger-bg); display:flex; align-items:center; justify-content:center; font-size:26px; color:var(--cfg-danger); margin:0 auto 16px; }
+    .cfg-alert-title { font-weight:700; font-size:17px; color:var(--cfg-text); margin:0 0 8px; }
+    .cfg-alert-text { color:var(--cfg-muted); font-size:13px; margin:0 0 24px; }
+    .cfg-alert-actions { display:flex; gap:10px; }
+    .cfg-btn-cancel { flex:1; padding:12px; border:none; border-radius:10px; background:var(--cfg-cancel-bg); color:var(--cfg-text); cursor:pointer; font-weight:600; font-size:13px; }
+    .cfg-btn-cancel:hover { background:var(--cfg-cancel-hover); }
+    .cfg-btn-confirm { flex:1; padding:12px; border:none; border-radius:10px; background:var(--cfg-danger); color:#fff; cursor:pointer; font-weight:600; font-size:13px; }
+    .cfg-btn-confirm:hover { opacity:.85; }
+    .cfg-toggle { position:relative; width:40px; height:22px; flex-shrink:0; }
+    .cfg-toggle input { opacity:0; width:0; height:0; }
+    .cfg-toggle-track { position:absolute; inset:0; border-radius:999px; background:var(--cfg-line); cursor:pointer; transition:background .25s; }
+    .cfg-toggle input:checked + .cfg-toggle-track { background:var(--cfg-icon-color); }
+    .cfg-toggle-track::after { content:''; position:absolute; top:3px; left:3px; width:16px; height:16px; border-radius:50%; background:#fff; transition:transform .25s; }
+    .cfg-toggle input:checked + .cfg-toggle-track::after { transform:translateX(18px); }
+
+    /* ══════════════════════════════════════
+       PRINT
+    ══════════════════════════════════════ */
+    #printHeader, #printDatos, #printInstrucciones,
+    #printPreguntasTitle, #printPreguntasSubtitle, #printFooter { display:none; }
+
+    @media print {
+      @page { margin: 15mm 18mm; }
+      * { transition:none !important; }
+      body { background:#fff !important; color:#000 !important; font-family:Arial,sans-serif !important; font-size:11pt !important; }
+      .noPrint, .topbar { display:none !important; }
+      .container { padding:0 !important; max-width:none !important; margin:0 !important; }
+      #printHeader { display:flex !important; align-items:center; border-bottom:3px solid #cc3300; padding-bottom:12px; margin-bottom:18px; gap:18px; }
+      #printLogoBox { display:flex; flex-direction:column; align-items:center; min-width:110px; }
+      #printLogoBox svg { width:100px; }
+      #printLogoText { font-size:8pt; color:#555; text-align:center; margin-top:3px; font-family:Arial,sans-serif; }
+      .print-divider { width:2px; height:60px; background:#cc3300; margin:0 4px; }
+      #printTitleBox h1 { font-size:26pt; font-weight:700; margin:0 0 2px; color:#000; }
+      #printTitleBox p { font-size:10pt; color:#555; margin:0; }
+      #printDatos { display:grid !important; grid-template-columns:1fr 1fr; gap:8px 24px; margin-bottom:18px; border-bottom:1px solid #ccc; padding-bottom:14px; }
+      .print-dato { display:flex; align-items:baseline; gap:8px; border-bottom:1px solid #ddd; padding-bottom:4px; }
+      .print-dato strong { font-size:10pt; font-weight:700; min-width:70px; color:#000; }
+      .print-dato span { font-size:10pt; color:#333; flex:1; }
+      #printInstrucciones { display:block !important; font-size:9.5pt; color:#444; margin-bottom:16px; border-left:3px solid #cc3300; padding:6px 10px; background:#fafafa; }
+      #printPreguntasTitle { display:block !important; font-size:16pt; font-weight:700; margin:0 0 4px; color:#000; }
+      #printPreguntasSubtitle { display:block !important; font-size:9.5pt; color:#555; margin-bottom:14px; }
+      .preguntas-grid { display:block !important; columns:2; column-gap:18px; }
+      .pregunta-item { break-inside:avoid; border:none !important; background:#fff !important; border-radius:0 !important; margin-bottom:14px; box-shadow:none !important; }
+      .pregunta-head { padding:0 0 4px !important; }
+      .pregunta-num { background:#cc3300 !important; color:#fff !important; border-radius:4px !important; width:22px !important; min-width:22px !important; height:22px !important; font-size:10pt !important; }
+      .pregunta-texto { font-size:10.5pt !important; font-weight:700 !important; color:#000 !important; }
+      .pts-badge,.pregunta-foot,.pregunta-meta { display:none !important; }
+      .opciones { padding:4px 0 0 30px !important; gap:3px !important; }
+      .opcion { font-size:10pt !important; padding:3px 8px !important; border:1px solid #ddd !important; background:#fff !important; color:#000 !important; }
+      .opcion.correcta { display:none !important; }
+      .respuesta-area { margin:6px 0 0 30px !important; padding:6px 8px !important; border:1px solid #ccc !important; background:#fff !important; color:#999 !important; font-size:9.5pt !important; min-height:50px !important; }
+      #printFooter { display:flex !important; justify-content:space-between; margin-top:20px; border-top:1px solid #ccc; padding-top:8px; font-size:8.5pt; color:#777; }
+      .stats-row { display:none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ TOPBAR ══ -->
+  <div class="topbar noPrint">
+    <div class="brand">
+      <div class="badge">E</div>
+      <div>
+        <h1>Generador de Evaluaciones</h1>
+        <p>Crea evaluaciones docentes con Inteligencia Artificial</p>
+      </div>
+    </div>
+    <div class="actions">
+      <a class="btn" href="./dashboard.html">← Dashboard</a>
+      <button class="btn" id="btnImprimir">🖨️ Imprimir</button>
+      <button class="btn ok" id="btnGuardar">Guardar</button>
+      <button class="btn" id="btnConfig" title="Configuración" aria-label="Abrir configuración">⚙️</button>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- ══ ELEMENTOS SOLO PARA IMPRESIÓN ══ -->
+    <div id="printHeader">
+      <div id="printLogoBox">
+        <svg viewBox="0 0 120 60" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="30" cy="30" r="25" fill="none" stroke="#2a7a3b" stroke-width="3"/>
+          <circle cx="30" cy="30" r="18" fill="none" stroke="#cc3300" stroke-width="2"/>
+          <path d="M18 30 Q30 18 42 30 Q30 42 18 30Z" fill="#2a7a3b" opacity="0.7"/>
+          <text x="58" y="22" font-family="Arial" font-weight="800" font-size="15" fill="#cc3300">CECyTE</text>
+          <text x="58" y="36" font-family="Arial" font-size="9" fill="#2a7a3b">Aguascalientes</text>
+          <line x1="56" y1="40" x2="115" y2="40" stroke="#cc3300" stroke-width="1.5"/>
+          <text x="58" y="52" font-family="Arial" font-size="7" fill="#555">Centro de Estudios Científicos</text>
+        </svg>
+        <div id="printLogoText">y Tecnológicos</div>
+      </div>
+      <div class="print-divider"></div>
+      <div id="printTitleBox">
+        <h1>Evaluación</h1>
+        <p id="printSubtitulo">Evaluación parcial</p>
+      </div>
+    </div>
+    <div id="printDatos">
+      <div class="print-dato"><strong>Materia:</strong><span id="pMateria">—</span></div>
+      <div class="print-dato"><strong>Grupo:</strong><span id="pGrupo">—</span></div>
+      <div class="print-dato"><strong>Docente:</strong><span id="pDocente">—</span></div>
+      <div class="print-dato"><strong>Tema:</strong><span id="pPeriodo">—</span></div>
+      <div class="print-dato"><strong>Fecha:</strong><span id="pFecha">—</span></div>
+      <div class="print-dato"><strong>Valor:</strong><span id="pValor">—</span></div>
+    </div>
+    <div id="printInstrucciones"></div>
+    <div id="printPreguntasTitle">Preguntas</div>
+    <div id="printPreguntasSubtitle">Responde las preguntas con opción múltiple</div>
+    <div id="printFooter">
+      <span id="pFooterLeft">CECyTE Aguascalientes</span>
+      <span>Página 1</span>
+      <span id="pFooterRight"></span>
+    </div>
+
+    <!-- ══ CARD: NIVEL EDUCATIVO ══ -->
+    <div class="pe-card noPrint">
+      <div class="pe-card-header">
+        <div class="pe-card-icon" style="background:rgba(56,211,159,0.12);border-color:rgba(56,211,159,0.25);color:var(--ok)">
+          <i class="bi bi-mortarboard"></i>
+        </div>
+        <div>
+          <p class="pe-card-title">Nivel educativo</p>
+          <p class="pe-card-sub">Selecciona el nivel para adaptar la evaluación</p>
+        </div>
+      </div>
+      <div class="nivel-grid" id="tipoSelector">
+        <div class="nivel-card n-basico selected" data-tipo="teorico" onclick="seleccionarTipo(this)">
+          <div class="nivel-badge">Básico</div>
+          <img class="nivel-img" src="img/educacion.png" alt="Educación básica" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+          <div style="display:none;font-size:42px">🏫</div>
+          <div class="nivel-title">Educación Básica</div>
+          <div class="nivel-desc">Preescolar, Primaria y Secundaria</div>
+          <div class="nivel-check"><i class="bi bi-check2"></i></div>
+        </div>
+        <div class="nivel-card n-media" data-tipo="practico" onclick="seleccionarTipo(this)">
+          <div class="nivel-badge">Media Superior</div>
+          <img class="nivel-img" src="img/educacion-a-distancia.png" alt="Media superior" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+          <div style="display:none;font-size:42px">🎒</div>
+          <div class="nivel-title">Media Superior</div>
+          <div class="nivel-desc">Preparatoria y Bachillerato</div>
+          <div class="nivel-check"><i class="bi bi-check2"></i></div>
+        </div>
+        <div class="nivel-card n-superior" data-tipo="mixto" onclick="seleccionarTipo(this)">
+          <div class="nivel-badge">Superior</div>
+          <img class="nivel-img" src="img/educacion-en-linea.png" alt="Superior" style="height: 50px; width: 50px;" >
+          <div style="display:none;font-size:42px">🎓</div>
+          <div class="nivel-title">Superior</div>
+          <div class="nivel-desc">Licenciatura, Ingeniería y Posgrado</div>
+          <div class="nivel-check"><i class="bi bi-check2"></i></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ CARD: GENERAR CON IA ══ -->
+    <div class="pe-ai-card noPrint">
+      <div class="pe-ai-badge">✨ Generador IA</div>
+      <p style="font-size:13px;color:var(--muted);margin:0 0 18px;">
+        Configura los parámetros y la IA generará una evaluación completa. Revisa y ajusta antes de guardar.
+      </p>
+
+      <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:12px;margin-bottom:12px">
+        <div class="pe-field">
+          <label class="pe-label">Materia / Tema *</label>
+          <input id="aiMateria" placeholder="Ej: Programación – Ciclos en Python" />
+        </div>
+        <div class="pe-field">
+          <label class="pe-label">Grupo</label>
+          <input id="aiGrupo" placeholder="Ej: 5A" />
+        </div>
+        <div class="pe-field">
+          <label class="pe-label">Preguntas</label>
+          <select id="aiNumPreguntas">
+            <option value="5">5 preguntas</option>
+            <option value="10" selected>10 preguntas</option>
+            <option value="15">15 preguntas</option>
+            <option value="20">20 preguntas</option>
+          </select>
+        </div>
+        <div class="pe-field">
+          <label class="pe-label">Dificultad</label>
+          <select id="aiDificultad">
+            <option value="basico">Básico</option>
+            <option value="intermedio" selected>Intermedio</option>
+            <option value="avanzado">Avanzado</option>
+          </select>
+        </div>
+        <div class="pe-field">
+          <label class="pe-label">Tiempo estimado</label>
+          <select id="aiTiempo">
+            <option value="30">30 minutos</option>
+            <option value="45" selected>45 minutos</option>
+            <option value="60">60 minutos</option>
+            <option value="90">90 minutos</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr auto;gap:12px;align-items:end">
+        <div class="pe-field">
+          <label class="pe-label">Instrucciones adicionales (opcional)</label>
+          <input id="aiInstrucciones" placeholder="Ej: Incluir recursividad, evitar punteros" />
+        </div>
+        <div class="pe-field">
+          <label class="pe-label" style="opacity:0">a</label>
+          <div style="display:flex;gap:8px;align-items:center">
+            <button class="pe-btn ai-btn" id="btnGenerar">✨ Generar evaluación</button>
+            <button class="pe-btn danger-btn" id="btnLimpiar" style="display:none">🗑️ Limpiar</button>
+            <div id="loadingDots" class="dots" style="display:none"><span></span><span></span><span></span></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="loadingBar" class="loading-bar" style="display:none"><div class="loading-bar-inner"></div></div>
+      <div id="aiStatus"></div>
+    </div>
+
+    <!-- ══ CARD: DATOS DEL EXAMEN ══ -->
+    <div class="pe-card">
+      <div class="pe-card-header">
+        <div class="pe-card-icon"><i class="bi bi-file-earmark-text"></i></div>
+        <div>
+          <p class="pe-card-title">Datos del examen</p>
+          <p class="pe-card-sub">Información que aparecerá en la hoja impresa</p>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:14px">
+        <div class="pe-field">
+          <label class="pe-label">Materia</label>
+          <input id="materia" placeholder="Ej: Programación" />
+        </div>
+        <div class="pe-field">
+          <label class="pe-label">Grupo</label>
+          <input id="grupo" placeholder="Ej: 5A" />
+        </div>
+        <div class="pe-field">
+          <label class="pe-label">Docente</label>
+          <input id="docente" placeholder="Tu nombre" />
+        </div>
+        <div class="pe-field">
+          <label class="pe-label">Tema / Periodo</label>
+          <input id="periodo" placeholder="Ej: Java – Parcial 2" />
+        </div>
+        <div class="pe-field">
+          <label class="pe-label">Fecha de aplicación</label>
+          <input id="fecha" type="date" />
+        </div>
+        <div class="pe-field">
+          <label class="pe-label">Valor total</label>
+          <input id="valorTotal" type="number" value="100" />
+        </div>
+      </div>
+      <div class="pe-grid-2">
+        <div class="pe-field">
+          <label class="pe-label">Instrucciones generales para el alumno</label>
+          <textarea id="instrucciones" placeholder="Lee con cuidado cada pregunta. Escribe con letra legible. No se permite uso de celular..."></textarea>
+        </div>
+        <div class="pe-field">
+          <label class="pe-label">Criterios de evaluación / rúbrica</label>
+          <textarea id="rubrica" placeholder="Ej: Cada opción múltiple vale 1 punto..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ CARD: PREGUNTAS ══ -->
+    <div class="pe-card">
+      <div class="pe-card-header">
+        <div class="pe-card-icon" style="background:rgba(124,156,255,0.12);border-color:rgba(124,156,255,0.25);color:var(--accent)">
+          <i class="bi bi-list-ol"></i>
+        </div>
+        <div style="flex:1">
+          <p class="pe-card-title">Preguntas <span id="totalPts" style="font-size:12px;font-weight:600;color:var(--ok)">· 0 pts</span></p>
+          <p class="pe-card-sub">Generadas por IA o agregadas manualmente</p>
+        </div>
+      </div>
+
+      <div class="stats-row" id="statsRow" style="display:none">
+        <div class="stat-pill"><div class="stat-val" id="statTotal">0</div><div class="stat-lbl">Total de preguntas</div></div>
+        <div class="stat-pill"><div class="stat-val" id="statMultiple">0</div><div class="stat-lbl">Opción múltiple / V-F</div></div>
+        <div class="stat-pill"><div class="stat-val" id="statAbierta">0</div><div class="stat-lbl">Ejercicios abiertos</div></div>
+        <div class="stat-pill"><div class="stat-val" id="statPractica">0</div><div class="stat-lbl">Código / Práctico</div></div>
+      </div>
+
+      <div id="preguntasContainer">
+        <div class="notice" style="text-align:center;padding:28px">
+          📝 Genera una evaluación con IA o agrega preguntas manualmente con el botón de abajo.
+        </div>
+      </div>
+
+      <div style="margin-top:14px" class="noPrint">
+        <button class="pe-btn" onclick="agregarPreguntaManual()">
+          <i class="bi bi-plus-lg"></i> Agregar pregunta manualmente
+        </button>
+      </div>
+    </div>
+
+    <div class="notice noPrint">
+      <i class="bi bi-info-circle" style="vertical-align:-2px;margin-right:4px"></i>
+      Guardado automático no activado. Usa <b>Guardar</b> y luego <b>Imprimir</b>.
+    </div>
+
+  </div><!-- /container -->
+
+  <!-- ══ MODAL EDITOR DE PREGUNTA ══ -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-box">
+      <div class="modal-title">✏️ Editar pregunta</div>
+      <div class="modal-field">
+        <label>Texto de la pregunta</label>
+        <textarea id="editTexto" style="min-height:70px"></textarea>
+      </div>
+      <div class="modal-field">
+        <label>Tipo de pregunta</label>
+        <select id="editTipo" onchange="actualizarEditorTipo()">
+          <option value="multiple">Opción múltiple</option>
+          <option value="vf">Verdadero / Falso</option>
+          <option value="ejercicio">Ejercicio abierto</option>
+          <option value="codigo">Código / Práctico</option>
+        </select>
+      </div>
+      <div id="editOpcionesArea"></div>
+      <div class="modal-field">
+        <label>Puntos</label>
+        <input type="number" id="editPts" value="5" min="0" max="100" style="width:120px" />
+      </div>
+      <div class="modal-actions">
+        <button class="btn" onclick="cerrarModal()">Cancelar</button>
+        <button class="btn primary" onclick="guardarEdicion()">💾 Guardar cambios</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- OVERLAY -->
+  <div id="cfgOverlay"></div>
+
+  <!-- PANEL PRINCIPAL -->
+  <div id="cfgPanel" class="cfg-panel-base">
+    <button class="cfg-close" id="cfgClose"><i class="bi bi-x"></i></button>
+    <div class="cfg-scroll">
+      <div class="cfg-header">
+        <div class="cfg-avatar"><i class="bi bi-person"></i></div>
+        <p class="cfg-name">Usuario</p>
+        <p class="cfg-username">@usuario.cecytea.edu.mx</p>
+      </div>
+      <p class="cfg-section-title">Cuenta</p>
+      <div class="cfg-card">
+        <div class="cfg-item" onclick="abrirSub('cuenta')">
+          <div class="cfg-item-left"><div class="cfg-icon"><i class="bi bi-person-circle"></i></div>Cuenta</div>
+          <div class="cfg-arrow"><i class="bi bi-chevron-right"></i></div>
+        </div>
+      </div>
+      <p class="cfg-section-title">Contenido y Pantalla</p>
+      <div class="cfg-card">
+        <div class="cfg-item" onclick="abrirSub('accesibilidad')">
+          <div class="cfg-item-left"><div class="cfg-icon"><i class="bi bi-universal-access"></i></div>Accesibilidad</div>
+          <div class="cfg-arrow"><i class="bi bi-chevron-right"></i></div>
+        </div>
+      </div>
+      <p class="cfg-section-title">Inicio de sesión</p>
+      <div class="cfg-card">
+        <div class="cfg-item" onclick="abrirSub('cerrar')">
+          <div class="cfg-item-left">
+            <div class="cfg-icon" style="background:var(--cfg-danger-bg);color:var(--cfg-danger)"><i class="bi bi-box-arrow-right"></i></div>
+            <span style="color:var(--cfg-danger)">Cerrar sesión</span>
+          </div>
+          <div class="cfg-arrow"><i class="bi bi-chevron-right"></i></div>
+        </div>
+      </div>
+      <div style="height:16px"></div>
+    </div>
+  </div>
+
+  <!-- SUB-PANEL -->
+  <div id="cfgSub" class="cfg-panel-base">
+    <div id="cfgSubContent" class="cfg-scroll"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.17/dist/sweetalert2.all.min.js"></script>
+  <script>
+  /* ── TEMA ── */
+  (function(){
+    const KEY='planeador_theme';
+    applyTheme(localStorage.getItem(KEY)||'dark');
+    function applyTheme(theme){
+      document.body.classList.toggle('light',theme==='light');
+      localStorage.setItem(KEY,theme);
+      const t=document.getElementById('darkModeToggle');
+      if(t) t.checked=(theme==='dark');
+    }
+    window.applyTheme=applyTheme;
+  })();
+
+  let tipoSeleccionado='teorico';
+  let preguntas=[];
+  let contadorPreguntas=0;
+  let editIdx=-1;
+
+  /* ── NIVEL ── */
+  function seleccionarTipo(el){
+    document.querySelectorAll('.nivel-card').forEach(c=>c.classList.remove('selected'));
+    el.classList.add('selected');
+    tipoSeleccionado=el.dataset.tipo;
+  }
+
+  /* ── GENERAR IA ── */
+  document.getElementById('btnGenerar').addEventListener('click', async () => {
+    const materia     = document.getElementById('aiMateria').value.trim();
+    const grupo       = document.getElementById('aiGrupo').value.trim();
+    const numPreguntas= document.getElementById('aiNumPreguntas').value;
+    const dificultad  = document.getElementById('aiDificultad').value;
+    const tiempo      = document.getElementById('aiTiempo').value;
+    const instrExtra  = document.getElementById('aiInstrucciones').value.trim();
+    if(!materia){ showStatus('⚠️ Escribe la materia o tema para continuar.'); return; }
+    setLoading(true); hideStatus();
+    try{
+      const res=await fetch("https://pinnovacion2026-production.up.railway.app/generar-evaluacion",{
+        method:"POST", headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({materia,grupo,numPreguntas,dificultad,tiempo,instrucciones:instrExtra,tipo:tipoSeleccionado})
+      });
+      const data=await res.json();
+      if(data.error) throw new Error(data.error);
+      preguntas=data?.preguntas||[];
+      renderPreguntas();
+      if(data?.instrucciones&&!document.getElementById('instrucciones').value)
+        document.getElementById('instrucciones').value=data.instrucciones;
+      document.getElementById('btnLimpiar').style.display='inline-flex';
+    }catch(err){
+      showStatus('❌ Error al generar: '+err.message);
+    }finally{
+      setLoading(false);
+    }
+  });
+
+  function setLoading(on){
+    document.getElementById('btnGenerar').disabled=on;
+    document.getElementById('loadingDots').style.display=on?'flex':'none';
+    document.getElementById('loadingBar').style.display=on?'block':'none';
+  }
+  function showStatus(m){ const s=document.getElementById('aiStatus'); s.style.display='block'; s.textContent=m; }
+  function hideStatus(){ document.getElementById('aiStatus').style.display='none'; }
+
+  document.getElementById('btnLimpiar').addEventListener('click',()=>{
+    preguntas=[]; contadorPreguntas=0; renderPreguntas();
+    document.getElementById('btnLimpiar').style.display='none'; hideStatus();
+  });
+
+  /* ── RENDER PREGUNTAS ── */
+  function renderPreguntas(){
+    const cont=document.getElementById('preguntasContainer');
+    const statsRow=document.getElementById('statsRow');
+    if(!preguntas.length){
+      statsRow.style.display='none';
+      document.getElementById('totalPts').textContent='· 0 pts';
+      cont.innerHTML=`<div class="notice" style="text-align:center;padding:28px">📝 Genera una evaluación con IA o agrega preguntas manualmente con el botón de abajo.</div>`;
+      return;
+    }
+    statsRow.style.display='flex';
+    let pts=0,cM=0,cA=0,cP=0;
+    const html=preguntas.map((p,i)=>{
+      pts+=Number(p.pts)||0;
+      const t=p.tipo||'ejercicio';
+      if(t==='multiple'||t==='vf') cM++;
+      else if(t==='ejercicio') cA++;
+      else if(t==='codigo') cP++;
+      const lbl={multiple:'Opción múltiple',vf:'Verdadero / Falso',ejercicio:'Ejercicio abierto',codigo:'Código / Práctico'}[t]||t;
+      let body='';
+      if(t==='multiple'&&p.opciones){
+        const letras=['A','B','C','D','E'];
+        body='<div class="opciones">'+p.opciones.map((op,j)=>
+          `<div class="opcion${j===p.correcta?' correcta':''}">${letras[j]}) ${op}${j===p.correcta?' ✓':''}</div>`
+        ).join('')+'</div>';
+      } else if(t==='vf'){
+        body=`<div class="opciones">
+          <div class="opcion${p.correcta===true?' correcta':''}">A) Verdadero${p.correcta===true?' ✓':''}</div>
+          <div class="opcion${p.correcta===false?' correcta':''}">B) Falso${p.correcta===false?' ✓':''}</div>
+        </div>`;
+      } else {
+        body=`<div class="respuesta-area">Espacio para respuesta...</div>`;
+      }
+      return `<div class="pregunta-item">
+        <div class="pregunta-head">
+          <div class="pregunta-num">${i+1}</div>
+          <div class="pregunta-texto">${p.texto}</div>
+          <span class="pts-badge">${p.pts||0} pts</span>
+        </div>
+        <div class="pregunta-meta"><span class="tipo-tag">${lbl}</span></div>
+        ${body}
+        <div class="pregunta-foot noPrint">
+          <button class="mini-btn edit" onclick="abrirEdicion(${i})">✏️ Editar</button>
+          <button class="mini-btn" onclick="eliminarPregunta(${i})">🗑️ Eliminar</button>
+        </div>
+      </div>`;
+    }).join('');
+    cont.innerHTML=`<div class="preguntas-grid">${html}</div>`;
+    document.getElementById('totalPts').textContent=`· ${pts} pts`;
+    document.getElementById('statTotal').textContent=preguntas.length;
+    document.getElementById('statMultiple').textContent=cM;
+    document.getElementById('statAbierta').textContent=cA;
+    document.getElementById('statPractica').textContent=cP;
+  }
+
+  function eliminarPregunta(i){ preguntas.splice(i,1); renderPreguntas(); }
+
+  function agregarPreguntaManual(){
+    contadorPreguntas++;
+    preguntas.push({
+      id:Date.now(), tipo:'multiple',
+      texto:'Nueva pregunta '+contadorPreguntas,
+      opciones:['Opción A','Opción B','Opción C','Opción D'],
+      correcta:0, pts:5
+    });
+    renderPreguntas();
+    abrirEdicion(preguntas.length-1);
+  }
+
+  /* ── MODAL ── */
+  function abrirEdicion(i){
+    editIdx=i;
+    const p=preguntas[i];
+    document.getElementById('editTexto').value=p.texto||'';
+    document.getElementById('editTipo').value=p.tipo||'multiple';
+    document.getElementById('editPts').value=p.pts||5;
+    actualizarEditorTipo(p);
+    document.getElementById('modalOverlay').classList.add('active');
+  }
+
+  function cerrarModal(){
+    document.getElementById('modalOverlay').classList.remove('active');
+    editIdx=-1;
+  }
+
+  function actualizarEditorTipo(pOrig){
+    const tipo=document.getElementById('editTipo').value;
+    const area=document.getElementById('editOpcionesArea');
+    const p=pOrig||(editIdx>=0?preguntas[editIdx]:null);
+    if(tipo==='multiple'){
+      const letras=['A','B','C','D'];
+      const opciones=p&&p.opciones?p.opciones:['','','',''];
+      const correcta=p&&p.correcta!==undefined?p.correcta:0;
+      area.innerHTML=`
+        <div class="modal-field"><label>Opciones (marca la correcta con ✓)</label>
+        ${opciones.map((op,j)=>`
+          <div class="opcion-row">
+            <input type="radio" name="correctaRadio" value="${j}" ${j===correcta?'checked':''}>
+            <span class="opcion-correcta-label">${letras[j]})</span>
+            <input type="text" class="editOpcion" data-idx="${j}" value="${op}" placeholder="Opción ${letras[j]}">
+          </div>`).join('')}
+        <button class="mini-btn" style="margin-top:6px" onclick="agregarOpcion()">+ Agregar opción</button>
+        </div>`;
+    } else if(tipo==='vf'){
+      const correcta=p&&p.correcta===true?'true':'false';
+      area.innerHTML=`
+        <div class="modal-field"><label>Respuesta correcta</label>
+          <select id="editVF" style="width:200px">
+            <option value="true" ${correcta==='true'?'selected':''}>Verdadero</option>
+            <option value="false" ${correcta==='false'?'selected':''}>Falso</option>
+          </select>
+        </div>`;
+    } else {
+      area.innerHTML='';
+    }
+  }
+
+  function agregarOpcion(){
+    const rows=document.querySelectorAll('.opcion-row');
+    const letras=['A','B','C','D','E','F'];
+    const j=rows.length;
+    const newRow=document.createElement('div');
+    newRow.className='opcion-row';
+    newRow.innerHTML=`
+      <input type="radio" name="correctaRadio" value="${j}">
+      <span class="opcion-correcta-label">${letras[j]||j+1})</span>
+      <input type="text" class="editOpcion" data-idx="${j}" value="" placeholder="Opción ${letras[j]||j+1}">`;
+    rows[rows.length-1].parentNode.insertBefore(newRow,document.querySelector('[onclick="agregarOpcion()"]'));
+  }
+
+  function guardarEdicion(){
+    if(editIdx<0) return;
+    const tipo=document.getElementById('editTipo').value;
+    const texto=document.getElementById('editTexto').value.trim()||'Pregunta sin texto';
+    const pts=parseInt(document.getElementById('editPts').value)||0;
+    const p={...preguntas[editIdx],tipo,texto,pts};
+    if(tipo==='multiple'){
+      const inputs=[...document.querySelectorAll('.editOpcion')];
+      p.opciones=inputs.map(i=>i.value||'—');
+      const radio=document.querySelector('input[name="correctaRadio"]:checked');
+      p.correcta=radio?parseInt(radio.value):0;
+    } else if(tipo==='vf'){
+      p.correcta=document.getElementById('editVF').value==='true';
+      delete p.opciones;
+    } else {
+      delete p.opciones; delete p.correcta;
+    }
+    preguntas[editIdx]=p;
+    renderPreguntas();
+    cerrarModal();
+  }
+
+  document.getElementById('modalOverlay').addEventListener('click',e=>{
+    if(e.target===document.getElementById('modalOverlay')) cerrarModal();
+  });
+
+  /* ── GUARDAR ── */
+  document.getElementById('btnGuardar').addEventListener('click',()=>{
+    const datos={
+      materia:document.getElementById('materia').value,
+      grupo:document.getElementById('grupo').value,
+      docente:document.getElementById('docente').value,
+      periodo:document.getElementById('periodo').value,
+      fecha:document.getElementById('fecha').value,
+      valorTotal:document.getElementById('valorTotal').value,
+      instrucciones:document.getElementById('instrucciones').value,
+      rubrica:document.getElementById('rubrica').value,
+      tipo:tipoSeleccionado, preguntas
+    };
+    localStorage.setItem('evaluacion_'+Date.now(),JSON.stringify(datos));
+    Swal.fire({
+      title:'✅ Guardado', text:'La evaluación se guardó correctamente.', icon:'success',
+      background:document.body.classList.contains('light')?'#fff':'#121a2b',
+      color:document.body.classList.contains('light')?'#1a2340':'#e8eefc',
+      confirmButtonColor:'#7c9cff', timer:2500, timerProgressBar:true
+    });
+  });
+
+  /* ── IMPRIMIR ── */
+  document.getElementById('btnImprimir').addEventListener('click',()=>{
+    const get=id=>document.getElementById(id).value||'—';
+    document.getElementById('pMateria').textContent=get('materia');
+    document.getElementById('pGrupo').textContent=get('grupo');
+    document.getElementById('pDocente').textContent=get('docente');
+    document.getElementById('pPeriodo').textContent=get('periodo');
+    document.getElementById('pFecha').textContent=get('fecha');
+    document.getElementById('pValor').textContent=get('valorTotal')+' pts';
+    const instr=document.getElementById('instrucciones').value;
+    document.getElementById('printInstrucciones').textContent=instr||'';
+    document.getElementById('printInstrucciones').style.display=instr?'block':'none';
+    document.getElementById('pFooterLeft').textContent='CECyTE Aguascalientes – '+get('materia');
+    document.getElementById('pFooterRight').textContent=get('docente');
+    document.getElementById('printSubtitulo').textContent=document.getElementById('periodo').value||'Evaluación parcial';
+    window.print();
+  });
+
+  /* ── CONFIG PANEL ── */
+  const cfgPanel=document.getElementById('cfgPanel');
+  const cfgSub=document.getElementById('cfgSub');
+  const cfgOverlay=document.getElementById('cfgOverlay');
+
+  document.getElementById('btnConfig').addEventListener('click',()=>{ cfgPanel.classList.add('active'); cfgOverlay.classList.add('active'); cfgSub.classList.remove('active'); });
+  document.getElementById('cfgClose').addEventListener('click',cerrarTodo);
+  cfgOverlay.addEventListener('click',cerrarTodo);
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ cerrarModal(); cerrarTodo(); } });
+
+  function cerrarTodo(){ cfgPanel.classList.remove('active'); cfgSub.classList.remove('active'); cfgOverlay.classList.remove('active'); }
+  function cerrarSub(){ cfgSub.classList.remove('active'); }
+
+  function abrirSub(tipo){
+    const cont=document.getElementById('cfgSubContent');
+    const isDark=!document.body.classList.contains('light');
+    let html='';
+    const hdr=(ic,n,s)=>`<div class="cfg-header" style="position:relative"><button class="cfg-back" onclick="cerrarSub()"><i class="bi bi-arrow-left"></i></button><div class="cfg-avatar"><i class="bi ${ic}"></i></div><p class="cfg-name">${n}</p><p class="cfg-username">${s}</p></div>`;
+    if(tipo==='cuenta') html=hdr('bi-person-circle','Cuenta','@usuario.cecytea.edu.mx')+`<p class="cfg-section-title">Información</p><div class="cfg-card"><div class="cfg-item"><div class="cfg-item-left"><div class="cfg-icon"><i class="bi bi-envelope"></i></div>Correo</div><span class="cfg-value">usuario@cecytea.edu.mx</span></div></div><div style="height:16px"></div>`;
+    if(tipo==='accesibilidad') html=hdr('bi-universal-access','Accesibilidad','Ajusta la experiencia visual')+`<p class="cfg-section-title">Pantalla</p><div class="cfg-card"><div class="cfg-item"><div class="cfg-item-left"><div class="cfg-icon"><i class="bi bi-moon-stars"></i></div>Modo oscuro</div><label class="cfg-toggle"><input type="checkbox" id="darkModeToggle" ${isDark?'checked':''} onchange="window.applyTheme(this.checked?'dark':'light')"><span class="cfg-toggle-track"></span></label></div></div><div style="height:16px"></div>`;
+    if(tipo==='cerrar') html=`<div style="position:relative"><button class="cfg-back" style="position:absolute;top:14px;left:16px" onclick="cerrarSub()"><i class="bi bi-arrow-left"></i></button><div class="cfg-alert" style="padding-top:52px"><div class="cfg-alert-icon"><i class="bi bi-exclamation-triangle"></i></div><p class="cfg-alert-title">¿Estás seguro?</p><p class="cfg-alert-text">Tu sesión se cerrará y tendrás que volver a iniciar sesión.</p><div class="cfg-alert-actions"><button class="cfg-btn-cancel" onclick="cerrarSub()">Cancelar</button><button class="cfg-btn-confirm" onclick="cerrarSesion()">Cerrar sesión</button></div></div></div>`;
+    cont.innerHTML=html; cfgSub.classList.add('active');
+  }
+
+  function cerrarSesion(){ localStorage.removeItem('loggedIn'); cerrarTodo(); window.location.href='index.html'; }
+  </script>
+</body>
+</html>
