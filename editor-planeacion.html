@@ -599,6 +599,12 @@
   </style>
 </head>
 <body>
+  <!-- SDK oficial de Supabase para validar la sesion en paginas privadas. -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Cliente compartido de Supabase usado por el guard de autenticacion. -->
+  <script src="js/supabase-client.js"></script>
+  <!-- Guard: si no hay sesion real en Supabase, regresa al login. -->
+  <script src="js/auth-guard.js"></script>
 
   <!-- ══ TOPBAR ══ -->
   <div class="topbar noPrint">
@@ -1207,7 +1213,13 @@
     cont.innerHTML=html; cfgSub.classList.add('active');
   }
 
-  function cerrarSesion(){ localStorage.removeItem('loggedIn'); cerrarTodo(); window.location.href='index.html'; }
+  async function cerrarSesion(){
+    // Cierre real de sesion en Supabase, ademas de limpiar la bandera antigua.
+    await window.PlanixSupabase.auth.signOut();
+    localStorage.removeItem('loggedIn');
+    cerrarTodo();
+    window.location.href='index.html';
+  }
   </script>
 </body>
 </html>
