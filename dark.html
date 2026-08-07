@@ -1,0 +1,1201 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ 
+    <title>SIA SMART</title>
+ 
+    <link rel="icon" type="image/png" href="img/LOGO SIA SMART.png">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+ 
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+ 
+        :root {
+            /* ---- superficies oscuras ---- */
+            --bg-dark:     #070d16;
+            --bg-dark-2:   #0c1622;
+            --surface:     #101c2c;
+            --surface-2:   #18273a;
+            --surface-3:   #20334a;
+            --border-soft: rgba(255, 255, 255, 0.08);
+ 
+            /* ---- texto sobre fondo oscuro ---- */
+            --text-light:  #e8f1f7;
+            --text-muted:  #93a7b8;
+            --heading:     #6fd3f5;
+ 
+            /* ---- acentos de marca (se mantienen vivos sobre oscuro) ---- */
+            --blue:        #2b8fe0;
+            --blue-dark:   #57b8f0;
+            --cyan:        #38c7e8;
+            --teal:        #24c9b5;
+            --green:       #43c978;
+ 
+            /* ---- brillo del logo para modo oscuro ---- */
+            --logo-glow:   rgba(56, 199, 232, 0.26);
+ 
+            --tagline-color: #b9d6e8;
+ 
+            --h-sia:   clamp(46px, 9vw, 74px);
+            --h-icon:  calc(var(--h-sia) * 1.95);
+            --h-smart: calc(var(--h-sia) * 0.32);
+        }
+ 
+        html,
+        body {
+            width: 100%;
+            min-height: 100%;
+            background: var(--bg-dark);
+            font-family: "Outfit", sans-serif;
+        }
+ 
+        body {
+            overflow: hidden;
+        }
+ 
+        /* =====================================================
+           SPLASH / ANIMACIÓN DEL LOGO
+           ===================================================== */
+ 
+        #splash {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+ 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+ 
+            background: var(--bg-dark);
+ 
+            transition:
+                opacity 0.7s ease,
+                transform 0.7s ease,
+                visibility 0.7s ease;
+        }
+ 
+        #splash.hide {
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(1.025);
+            pointer-events: none;
+        }
+ 
+        .grid-bg {
+            position: absolute;
+            inset: 0;
+ 
+            background-image:
+                linear-gradient(
+                    rgba(56, 199, 232, 0.07) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(56, 199, 232, 0.07) 1px,
+                    transparent 1px
+                );
+ 
+            background-size: 48px 48px;
+            opacity: 0;
+ 
+            animation:
+                gridFadeIn 1.2s ease 0.1s forwards,
+                gridMove 30s linear infinite;
+        }
+ 
+        @keyframes gridFadeIn {
+            to { opacity: 1; }
+        }
+ 
+        @keyframes gridMove {
+            to { background-position: 48px 48px; }
+        }
+ 
+        /* halo ambiental sutil, propio del modo oscuro */
+        .glow-orb {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 640px;
+            height: 640px;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+ 
+            background: radial-gradient(
+                circle,
+                rgba(43, 143, 224, 0.16) 0%,
+                rgba(36, 201, 181, 0.10) 40%,
+                transparent 72%
+            );
+ 
+            opacity: 0;
+            animation: orbAppear 1.2s ease 0.2s forwards;
+        }
+ 
+        @keyframes orbAppear {
+            to { opacity: 1; }
+        }
+ 
+        .float-icons {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+ 
+        .fi {
+            position: absolute;
+            font-size: 25px;
+            opacity: 0;
+ 
+            filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.5));
+ 
+            animation:
+                floatUp var(--duration)
+                ease-in-out
+                var(--delay)
+                infinite;
+        }
+ 
+        @keyframes floatUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px) rotate(-8deg) scale(0.85);
+            }
+ 
+            15% { opacity: 0.75; }
+ 
+            50% {
+                opacity: 0.9;
+                transform: translateY(-70px) rotate(5deg) scale(1);
+            }
+ 
+            85% { opacity: 0.65; }
+ 
+            100% {
+                opacity: 0;
+                transform: translateY(-170px) rotate(16deg) scale(1.08);
+            }
+        }
+ 
+        .splash-content {
+            position: relative;
+            z-index: 2;
+ 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+ 
+            width: 100%;
+            padding: 20px;
+        }
+ 
+        /* Logo integrado al fondo oscuro, sin placa blanca */
+        .logo-plate {
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            padding: clamp(10px, 2.4vw, 20px) clamp(14px, 3vw, 28px);
+            box-shadow: none;
+        }
+ 
+        .logo-build {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: clamp(10px, 2.4vw, 22px);
+        }
+ 
+        .icon-part {
+            height: var(--h-icon);
+            width: auto;
+            object-fit: contain;
+            flex-shrink: 0;
+ 
+            opacity: 0;
+            transform: scale(0.4) rotate(-28deg);
+ 
+            filter:
+                brightness(0)
+                invert(1)
+                drop-shadow(0 8px 18px var(--logo-glow));
+
+            animation:
+                iconPop
+                0.9s
+                cubic-bezier(0.34, 1.56, 0.64, 1)
+                0.35s
+                forwards;
+        }
+ 
+        @keyframes iconPop {
+            0% {
+                opacity: 0;
+                transform: scale(0.4) rotate(-28deg);
+            }
+ 
+            60% {
+                opacity: 1;
+                transform: scale(1.08) rotate(4deg);
+            }
+ 
+            100% {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+        }
+ 
+        .text-build {
+            display: flex;
+            flex-direction: column;
+            gap: clamp(4px, 1.2vw, 10px);
+        }
+ 
+        .sia-row,
+        .smart-row {
+            display: flex;
+            align-items: flex-end;
+        }
+ 
+        .sia-row {
+            gap: clamp(4px, 1vw, 10px);
+        }
+ 
+        .smart-row {
+            gap: clamp(9px, 2.2vw, 20px);
+        }
+ 
+        .letter {
+            display: block;
+            height: var(--h-sia);
+            width: auto;
+            object-fit: contain;
+ 
+            opacity: 0;
+            transform: translateY(14px) scale(0.6);
+ 
+            filter:
+                brightness(0)
+                invert(1)
+                drop-shadow(0 5px 12px var(--logo-glow));
+
+            animation:
+                letterPop
+                0.55s
+                cubic-bezier(0.25, 0.8, 0.4, 1)
+                forwards;
+        }
+ 
+        .smart-row .letter {
+            height: var(--h-smart);
+        }
+ 
+        @keyframes letterPop {
+            0% {
+                opacity: 0;
+                transform: translateY(14px) scale(0.6);
+            }
+ 
+            55% {
+                opacity: 1;
+            }
+ 
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+ 
+        .sia-row .letter:nth-child(1) { animation-delay: 0.95s; }
+        .sia-row .letter:nth-child(2) { animation-delay: 1.10s; }
+        .sia-row .letter:nth-child(3) { animation-delay: 1.25s; }
+ 
+        .smart-row .letter:nth-child(1) { animation-delay: 1.55s; }
+        .smart-row .letter:nth-child(2) { animation-delay: 1.67s; }
+        .smart-row .letter:nth-child(3) { animation-delay: 1.79s; }
+        .smart-row .letter:nth-child(4) { animation-delay: 1.91s; }
+        .smart-row .letter:nth-child(5) { animation-delay: 2.03s; }
+ 
+        .tagline-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+ 
+            width: 100%;
+            margin-top: 28px;
+            padding: 0 16px;
+        }
+ 
+        .tagline-line {
+            width: clamp(24px, 8vw, 70px);
+            height: 1px;
+ 
+            background: linear-gradient(90deg, transparent, var(--cyan));
+            opacity: 0;
+ 
+            animation: showLine 0.5s ease 2.3s forwards;
+        }
+ 
+        .tagline-row .tagline-line:last-child {
+            background: linear-gradient(90deg, var(--cyan), transparent);
+        }
+ 
+        @keyframes showLine {
+            to { opacity: 1; }
+        }
+ 
+        .tagline {
+            color: var(--tagline-color);
+            font-size: clamp(10.5px, 2vw, 14px);
+            font-weight: 500;
+            letter-spacing: 2.6px;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+ 
+        .tagline .tchar {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(8px) scale(0.7);
+ 
+            animation:
+                charPop
+                0.35s
+                cubic-bezier(0.25, 0.8, 0.4, 1)
+                forwards;
+        }
+ 
+        @keyframes charPop {
+            0% {
+                opacity: 0;
+                transform: translateY(8px) scale(0.7);
+            }
+ 
+            60% { opacity: 1; }
+ 
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+ 
+        .progress-track {
+            position: absolute;
+            bottom: 60px;
+ 
+            width: min(220px, 60vw);
+            height: 3px;
+ 
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.10);
+            border-radius: 999px;
+ 
+            opacity: 0;
+            animation: showProgress 0.4s ease 4.1s forwards;
+        }
+ 
+        .progress-fill {
+            width: 0;
+            height: 100%;
+ 
+            background:
+                linear-gradient(
+                    90deg,
+                    var(--blue),
+                    var(--cyan),
+                    var(--teal),
+                    var(--green)
+                );
+ 
+            border-radius: inherit;
+            box-shadow: 0 0 10px rgba(56, 199, 232, 0.55);
+ 
+            animation:
+                fillProgress
+                1.6s
+                cubic-bezier(0.4, 0, 0.2, 1)
+                4.2s
+                forwards;
+        }
+ 
+        @keyframes showProgress {
+            to { opacity: 1; }
+        }
+ 
+        @keyframes fillProgress {
+            to { width: 100%; }
+        }
+ 
+        /* =====================================================
+           PANTALLA DE INICIO DE SESIÓN
+           ===================================================== */
+ 
+        #app {
+            position: fixed;
+            inset: 0;
+ 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+ 
+            padding: 24px 16px;
+            overflow-y: auto;
+ 
+            background:
+                radial-gradient(
+                    circle at 15% 20%,
+                    rgba(56, 199, 232, 0.14),
+                    transparent 34%
+                ),
+                radial-gradient(
+                    circle at 85% 78%,
+                    rgba(67, 201, 120, 0.12),
+                    transparent 32%
+                ),
+                linear-gradient(135deg, var(--bg-dark-2), var(--bg-dark));
+ 
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+ 
+            transition:
+                opacity 0.75s ease 0.1s,
+                visibility 0.75s ease 0.1s;
+        }
+ 
+        #app.show {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+ 
+        .wrapper {
+            width: 100%;
+            max-width: 420px;
+ 
+            padding:
+                clamp(24px, 5vw, 38px)
+                clamp(20px, 5vw, 34px);
+ 
+            background: rgba(16, 28, 44, 0.85);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid var(--border-soft);
+            border-radius: 20px;
+ 
+            box-shadow:
+                0 25px 65px rgba(0, 0, 0, 0.55),
+                0 0 40px rgba(56, 199, 232, 0.08);
+ 
+            text-align: center;
+ 
+            opacity: 0;
+            transform: translateY(24px) scale(0.98);
+        }
+ 
+        #app.show .wrapper {
+            animation:
+                cardUp
+                0.75s
+                cubic-bezier(0.34, 1.2, 0.64, 1)
+                0.2s
+                forwards;
+        }
+ 
+        @keyframes cardUp {
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+ 
+        /* Logo de acceso en blanco para conservar contraste en modo oscuro */
+        .institution-logo {
+            display: block;
+
+            width: 92px;
+            max-width: 42%;
+            height: auto;
+            max-height: 72px;
+
+            margin: 0 auto 18px;
+            object-fit: contain;
+
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            padding: 0;
+
+            filter:
+                brightness(0)
+                invert(1)
+                drop-shadow(0 7px 18px var(--logo-glow));
+        }
+ 
+        .card-title {
+            margin-bottom: 24px;
+ 
+            color: var(--heading);
+            font-size: clamp(20px, 4vw, 24px);
+            font-weight: 700;
+        }
+ 
+        .field-wrap {
+            margin-bottom: 16px;
+        }
+ 
+        .input-label {
+            display: block;
+ 
+            margin-bottom: 7px;
+ 
+            color: var(--text-muted);
+            font-size: 13px;
+            font-weight: 600;
+            text-align: left;
+        }
+ 
+        .custom-input {
+            position: relative;
+        }
+ 
+        .custom-input input {
+            width: 100%;
+ 
+            padding: 13px 48px;
+ 
+            background: var(--surface-2);
+            border: 1px solid var(--border-soft);
+            border-radius: 24px;
+ 
+            color: var(--text-light);
+            font-family: "Outfit", sans-serif;
+            font-size: 15px;
+ 
+            outline: none;
+ 
+            transition:
+                border-color 0.2s ease,
+                background 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+ 
+        .custom-input input::placeholder {
+            color: #6f8598;
+        }
+ 
+        .custom-input input:focus {
+            background: var(--surface-3);
+            border-color: rgba(56, 199, 232, 0.55);
+            box-shadow: 0 0 0 4px rgba(56, 199, 232, 0.14);
+        }
+ 
+        .icon-left,
+        .icon-right {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 17px;
+        }
+ 
+        .icon-left {
+            left: 16px;
+            color: var(--green);
+            pointer-events: none;
+        }
+ 
+        .icon-right {
+            right: 16px;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+ 
+        .icon-right:hover {
+            color: var(--cyan);
+        }
+ 
+        .remember-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+ 
+            margin-bottom: 18px;
+ 
+            color: var(--text-muted);
+            font-size: 14px;
+            text-align: left;
+        }
+ 
+        .remember-row input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--blue);
+            cursor: pointer;
+        }
+ 
+        .btn-login,
+        .btn-google {
+            width: 100%;
+            min-height: 48px;
+ 
+            border: none;
+            border-radius: 30px;
+ 
+            font-family: "Outfit", sans-serif;
+            cursor: pointer;
+ 
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+ 
+        .btn-login {
+            padding: 14px 0;
+ 
+            background:
+                linear-gradient(
+                    90deg,
+                    var(--blue),
+                    var(--teal),
+                    var(--green)
+                );
+ 
+            color: #06121c;
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+ 
+            box-shadow:
+                0 10px 28px rgba(56, 199, 232, 0.30);
+        }
+ 
+        .btn-google {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+ 
+            margin-top: 12px;
+ 
+            background: var(--surface-2);
+            border: 1px solid var(--border-soft);
+ 
+            color: var(--text-light);
+            font-size: 14px;
+            font-weight: 500;
+ 
+            box-shadow:
+                0 6px 16px rgba(0, 0, 0, 0.35);
+        }
+ 
+        .btn-login:hover,
+        .btn-google:hover {
+            transform: translateY(-2px);
+        }
+ 
+        .btn-login:hover {
+            box-shadow:
+                0 14px 32px rgba(56, 199, 232, 0.40);
+        }
+ 
+        .btn-google:hover {
+            background: var(--surface-3);
+            box-shadow:
+                0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+ 
+        .btn-google svg {
+            flex-shrink: 0;
+        }
+ 
+        .link-registro {
+            margin-top: 17px;
+ 
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+ 
+        .link-registro a {
+            color: var(--cyan);
+            font-weight: 700;
+            text-decoration: none;
+        }
+ 
+        .link-registro a:hover {
+            text-decoration: underline;
+        }
+ 
+        /* =====================================================
+           RESPONSIVE
+           ===================================================== */
+ 
+        @media (max-width: 600px) {
+            :root {
+                --h-sia: clamp(38px, 12vw, 54px);
+            }
+ 
+            .fi {
+                font-size: 21px;
+            }
+ 
+            .tagline-row {
+                gap: 8px;
+            }
+ 
+            .tagline {
+                font-size: clamp(8px, 2.65vw, 11px);
+                letter-spacing: 1.4px;
+            }
+ 
+            .tagline-line {
+                width: clamp(12px, 6vw, 30px);
+            }
+ 
+            .progress-track {
+                bottom: 40px;
+            }
+ 
+            .wrapper {
+                border-radius: 16px;
+            }
+        }
+ 
+        @media (max-height: 720px) {
+            #app {
+                align-items: flex-start;
+            }
+ 
+            .wrapper {
+                margin: auto;
+                padding-top: 22px;
+                padding-bottom: 22px;
+            }
+ 
+            .institution-logo {
+                width: 82px;
+                max-width: 38%;
+                max-height: 64px;
+                margin-bottom: 12px;
+            }
+ 
+            .card-title {
+                margin-bottom: 16px;
+            }
+ 
+            .field-wrap {
+                margin-bottom: 11px;
+            }
+        }
+ 
+        /* =====================================================
+           ACCESIBILIDAD
+           ===================================================== */
+ 
+        @media (prefers-reduced-motion: reduce) {
+            .grid-bg,
+            .glow-orb,
+            .fi,
+            .icon-part,
+            .letter,
+            .tagline-line,
+            .tchar,
+            .progress-track,
+            .progress-fill {
+                animation: none !important;
+            }
+ 
+            .grid-bg,
+            .glow-orb {
+                opacity: 1;
+            }
+ 
+            .icon-part,
+            .letter,
+            .tchar {
+                opacity: 1;
+                transform: none;
+            }
+ 
+            .tagline-line,
+            .progress-track {
+                opacity: 1;
+            }
+ 
+            .progress-fill {
+                width: 100%;
+            }
+ 
+            #splash,
+            #app {
+                transition: none;
+            }
+ 
+            #app.show .wrapper {
+                animation: none;
+                opacity: 1;
+                transform: none;
+            }
+        }
+    </style>
+</head>
+ 
+<body>
+ 
+    <!-- ANIMACIÓN INICIAL -->
+    <div id="splash">
+ 
+        <div class="grid-bg"></div>
+        <div class="glow-orb"></div>
+ 
+        <div
+            class="float-icons"
+            id="floatIcons"
+        ></div>
+ 
+        <div class="splash-content">
+ 
+            <div class="logo-plate">
+ 
+                <div class="logo-build">
+ 
+                    <img
+                        src="img/LOGO SIA SMART.png"
+                        alt=""
+                        class="icon-part"
+                    >
+ 
+                    <div class="text-build">
+ 
+                        <div class="sia-row">
+                            <img src="img/sia-s.png" alt="S" class="letter">
+                            <img src="img/sia-i.png" alt="I" class="letter">
+                            <img src="img/sia-a.png" alt="A" class="letter">
+                        </div>
+ 
+                        <div class="smart-row">
+                            <img src="img/smart-s.png" alt="S" class="letter">
+                            <img src="img/smart-m.png" alt="M" class="letter">
+                            <img src="img/smart-a.png" alt="A" class="letter">
+                            <img src="img/smart-r.png" alt="R" class="letter">
+                            <img src="img/smart-t.png" alt="T" class="letter">
+                        </div>
+ 
+                    </div>
+ 
+                </div>
+ 
+            </div>
+ 
+            <div class="tagline-row">
+                <span class="tagline-line"></span>
+ 
+                <p
+                    class="tagline"
+                    id="tagline"
+                ></p>
+ 
+                <span class="tagline-line"></span>
+            </div>
+ 
+        </div>
+ 
+        <div class="progress-track">
+            <div class="progress-fill"></div>
+        </div>
+ 
+    </div>
+ 
+    <!-- INICIO DE SESIÓN -->
+    <main id="app">
+ 
+        <section class="wrapper">
+ 
+            <img
+                src="img/LOGO SIA SMART.png"
+                alt="SIA SMART"
+                class="institution-logo"
+                onerror="this.style.display='none'"
+            >
+ 
+            <h1 class="card-title">
+                Iniciar sesión
+            </h1>
+ 
+            <div class="field-wrap">
+ 
+                <label
+                    class="input-label"
+                    for="usuario"
+                >
+                    Email
+                </label>
+ 
+                <div class="custom-input">
+ 
+                    <i
+                        class="bi bi-envelope-fill icon-left"
+                        aria-hidden="true"
+                    ></i>
+ 
+                    <input
+                        type="email"
+                        id="usuario"
+                        placeholder="name@cecytea.edu.mx"
+                        autocomplete="email"
+                        required
+                    >
+ 
+                </div>
+ 
+            </div>
+ 
+            <div class="field-wrap">
+ 
+                <label
+                    class="input-label"
+                    for="password"
+                >
+                    Contraseña
+                </label>
+ 
+                <div class="custom-input">
+ 
+                    <i
+                        class="bi bi-lock-fill icon-left"
+                        aria-hidden="true"
+                    ></i>
+ 
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="••••••••"
+                        autocomplete="current-password"
+                        required
+                    >
+ 
+                    <i
+                        class="bi bi-eye icon-right"
+                        id="togglePassword"
+                        role="button"
+                        tabindex="0"
+                        aria-label="Mostrar u ocultar contraseña"
+                    ></i>
+ 
+                </div>
+ 
+            </div>
+ 
+            <div class="remember-row">
+ 
+                <input
+                    type="checkbox"
+                    id="remember"
+                    checked
+                >
+ 
+                <label for="remember">
+                    Recordarme
+                </label>
+ 
+            </div>
+ 
+            <button
+                type="button"
+                id="btnLogin"
+                class="btn-login"
+            >
+                Iniciar sesión
+            </button>
+ 
+            <button
+                type="button"
+                class="btn-google"
+            >
+                <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 48 48"
+                    aria-hidden="true"
+                >
+                    <path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.2l6.8-6.8C35.7 2.2 30.2 0 24 0 14.6 0 6.6 5.4 2.7 13.3l7.9 6.1C12.5 13.3 17.8 9.5 24 9.5z"/>
+                    <path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h12.7c-.6 3-2.3 5.5-4.8 7.2l7.6 5.9c4.4-4.1 7-10.1 7-17.1z"/>
+                    <path fill="#FBBC05" d="M10.6 28.6A14.6 14.6 0 0 1 9.5 24c0-1.6.3-3.2.8-4.6L2.7 13.3A24 24 0 0 0 0 24c0 3.9.9 7.5 2.7 10.7l7.9-6.1z"/>
+                    <path fill="#34A853" d="M24 48c6.2 0 11.4-2 15.2-5.4l-7.6-5.9c-2 1.4-4.6 2.2-7.6 2.2-6.2 0-11.5-3.8-13.4-9.3l-7.9 6.1C6.6 42.6 14.6 48 24 48z"/>
+                </svg>
+ 
+                Iniciar con Google
+            </button>
+ 
+            <p class="link-registro">
+                ¿No tienes cuenta?
+                <a href="registro.html">
+                    Crear cuenta
+                </a>
+            </p>
+ 
+        </section>
+ 
+    </main>
+ 
+    <script>
+        /* Emojis flotantes */
+        const icons = [
+            "📚",
+            "✏️",
+            "📐",
+            "🎓",
+            "📊",
+            "🗓️",
+            "📝",
+            "🔬",
+            "💡",
+            "🧠"
+        ];
+ 
+        const floatContainer =
+            document.getElementById("floatIcons");
+ 
+        icons.forEach((icon, index) => {
+            const element =
+                document.createElement("div");
+ 
+            element.className = "fi";
+            element.textContent = icon;
+ 
+            element.style.left =
+                `${6 + Math.random() * 88}%`;
+ 
+            element.style.bottom =
+                `${2 + Math.random() * 35}%`;
+ 
+            element.style.setProperty(
+                "--duration",
+                `${4.5 + Math.random() * 3}s`
+            );
+ 
+            element.style.setProperty(
+                "--delay",
+                `${1 + index * 0.28 + Math.random()}s`
+            );
+ 
+            floatContainer.appendChild(element);
+        });
+ 
+        /* Texto inferior, letra por letra */
+        const taglineText =
+            "Sistema Integral Académico Inteligente®";
+ 
+        const taglineElement =
+            document.getElementById("tagline");
+ 
+        const baseDelay = 2.35;
+        const characterDelay = 0.028;
+ 
+        [...taglineText].forEach((character, index) => {
+            const span =
+                document.createElement("span");
+ 
+            span.className = "tchar";
+ 
+            span.textContent =
+                character === " "
+                    ? "\u00A0"
+                    : character;
+ 
+            span.style.animationDelay =
+                `${baseDelay + index * characterDelay}s`;
+ 
+            taglineElement.appendChild(span);
+        });
+ 
+        /* Transición: animación -> inicio de sesión */
+        const splash =
+            document.getElementById("splash");
+ 
+        const app =
+            document.getElementById("app");
+ 
+        const reduceMotion =
+            window.matchMedia(
+                "(prefers-reduced-motion: reduce)"
+            ).matches;
+ 
+        setTimeout(() => {
+            splash.classList.add("hide");
+            app.classList.add("show");
+            document.body.style.overflow = "auto";
+ 
+            setTimeout(() => {
+                document.getElementById("usuario")?.focus();
+            }, 850);
+        }, reduceMotion ? 700 : 6300);
+ 
+        /* Mostrar u ocultar contraseña */
+        const togglePassword =
+            document.getElementById("togglePassword");
+ 
+        function changePasswordVisibility() {
+            const passwordInput =
+                document.getElementById("password");
+ 
+            const hidden =
+                passwordInput.type === "password";
+ 
+            passwordInput.type =
+                hidden
+                    ? "text"
+                    : "password";
+ 
+            togglePassword.classList.toggle(
+                "bi-eye",
+                !hidden
+            );
+ 
+            togglePassword.classList.toggle(
+                "bi-eye-slash",
+                hidden
+            );
+        }
+ 
+        togglePassword.addEventListener(
+            "click",
+            changePasswordVisibility
+        );
+ 
+        togglePassword.addEventListener(
+            "keydown",
+            (event) => {
+                if (
+                    event.key === "Enter" ||
+                    event.key === " "
+                ) {
+                    event.preventDefault();
+                    changePasswordVisibility();
+                }
+            }
+        );
+    </script>
+ 
+    <!-- Mantén estos scripts si tu inicio de sesión ya usa Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-client.js"></script>
+    <script src="js/login.js"></script>
+ 
+</body>
+</html>
+ 
